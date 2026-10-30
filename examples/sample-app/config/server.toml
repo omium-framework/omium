@@ -1,0 +1,5 @@
+[server]
+host = "127.0.0.1"
+port = 8080
+request_timeout_secs = 30
+body_limit_bytes = 2097152

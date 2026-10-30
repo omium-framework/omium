@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<h1>{{ app_name }}</h1>
+<p>Examples from MySQL (<code>examples</code> table):</p>
+{% if let Some(message) = status_message %}
+<p>{{ message }}</p>
+{% endif %}
+<table>
+  <thead><tr><th>ID</th><th>Name</th><th>Description Selam</th></tr></thead>
+  <tbody>
+  {% for row in rows %}
+    <tr>
+      <td>{{ row.id }}</td>
+      <td>{{ row.name }}</td>
+      <td>{{ row.description }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

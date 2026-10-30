@@ -1,0 +1,41 @@
+{
+  "project": "RustBridge Engineering Blueprint",
+  "document_version": "1.0.0",
+  "created": "2026-10-30",
+  "language": {
+    "technical_docs": "English",
+    "owner_learning_and_approval": "Turkish"
+  },
+  "files": [
+    ".cursor/rules/00-project.mdc",
+    ".cursor/rules/frontend.mdc",
+    ".cursor/rules/rust.mdc",
+    ".cursor/rules/security.mdc",
+    ".github/copilot-instructions.md",
+    "AGENTS.md",
+    "README.md",
+    "docs/ACCEPTANCE_CRITERIA.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CLI_AND_GENERATORS.md",
+    "docs/DATABASE_AND_ORM.md",
+    "docs/DECISIONS.md",
+    "docs/DEPENDENCY_POLICY.md",
+    "docs/FRONTEND_MODES.md",
+    "docs/IMPLEMENTATION_ROADMAP.md",
+    "docs/OPEN_DECISIONS.md",
+    "docs/OWNER_LEARNING_PROTOCOL.md",
+    "docs/PRODUCT_VISION.md",
+    "docs/REFERENCES.md",
+    "docs/SECURITY.md",
+    "docs/TECH_STACK.md",
+    "docs/TESTING_AND_QUALITY.md",
+    "rules/00-global.md",
+    "rules/approval-gates.md",
+    "rules/architecture.md",
+    "rules/frontend.md",
+    "rules/rust.md",
+    "rules/security.md",
+    "rules/testing.md"
+  ],
+  "note": "Working codename only; public naming and selected open decisions require owner approval."
+}

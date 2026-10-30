@@ -1,0 +1,4 @@
+[app]
+name = "Omium"
+environment = "local"
+debug = true
