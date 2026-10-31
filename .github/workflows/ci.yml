@@ -31,5 +31,5 @@ jobs:
       - name: Build release binary
         run: cargo build --release -p omium-cli
 
-      - name: Build sample application
-        run: cargo build -p sample-app
+      - name: Build standard example application
+        run: cargo build --manifest-path examples/standard/Cargo.toml

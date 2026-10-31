@@ -6,8 +6,8 @@ use axum::http::header::{COOKIE, SET_COOKIE};
 use axum::http::{HeaderValue, Request, Response};
 use axum::middleware::Next;
 use omium_core::presentation::{
-    FlashMessages, RequestPresentation, build_nav, read_flash_from_cookie_header,
-    FLASH_ERROR_COOKIE, FLASH_SUCCESS_COOKIE,
+    FLASH_ERROR_COOKIE, FLASH_SUCCESS_COOKIE, FlashMessages, RequestPresentation, build_nav,
+    read_flash_from_cookie_header,
 };
 
 /// Application navigation entries (`href`, `label`), shared by middleware.
@@ -66,11 +66,13 @@ fn cookie_encode(input: &str) -> String {
 }
 
 /// Queues a one-shot success flash (read on the next web request).
+#[must_use]
 pub fn flash_success_cookie(message: &str) -> Option<HeaderValue> {
     flash_cookie(FLASH_SUCCESS_COOKIE, message)
 }
 
 /// Queues a one-shot error flash (read on the next web request).
+#[must_use]
 pub fn flash_error_cookie(message: &str) -> Option<HeaderValue> {
     flash_cookie(FLASH_ERROR_COOKIE, message)
 }
@@ -87,7 +89,7 @@ fn flash_cookie(name: &str, message: &str) -> Option<HeaderValue> {
 }
 
 /// Attaches flash Set-Cookie headers to a response (redirect or HTML).
-pub fn apply_flash_to_response(response: &mut Response<Body>, flash: FlashMessages) {
+pub fn apply_flash_to_response(response: &mut Response<Body>, flash: &FlashMessages) {
     if let Some(message) = flash.success.as_deref()
         && let Some(value) = flash_success_cookie(message)
     {

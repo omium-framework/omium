@@ -155,7 +155,10 @@ pub fn rewrite_template_manifest(
         && manifest.parent().is_some_and(|p| p.ends_with("migration"))
     {
         migration_framework_dependencies(mode, app_dir)?
-    } else if manifest.parent().is_some_and(|p| p.join("migration").is_dir()) {
+    } else if manifest
+        .parent()
+        .is_some_and(|p| p.join("migration").is_dir())
+    {
         if content.contains("omium-inertia") {
             inertia_app_framework_dependencies(mode)
         } else {

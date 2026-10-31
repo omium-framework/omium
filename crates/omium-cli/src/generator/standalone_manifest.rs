@@ -112,14 +112,18 @@ members = [".", "migration"]
 resolver = "2"
 "#,
     );
-    fs::write(app_manifest, content).with_context(|| format!("write {}", app_manifest.display()))?;
+    fs::write(app_manifest, content)
+        .with_context(|| format!("write {}", app_manifest.display()))?;
     Ok(())
 }
 
 fn strip_workspace_table(manifest: &Path) -> Result<()> {
     let content =
         fs::read_to_string(manifest).with_context(|| format!("read {}", manifest.display()))?;
-    let Some(idx) = content.lines().position(|line| line.trim() == "[workspace]") else {
+    let Some(idx) = content
+        .lines()
+        .position(|line| line.trim() == "[workspace]")
+    else {
         return Ok(());
     };
     let kept: Vec<&str> = content

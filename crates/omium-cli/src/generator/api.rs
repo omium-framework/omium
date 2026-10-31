@@ -7,7 +7,7 @@ use anyhow::{Context, Result, bail};
 
 use super::omnisan_script::write_app_omnisan_wrapper;
 use crate::generator::new::write_env_example;
-use crate::generator::template_copy::{copy_tree, replace_in_file, COPY_SKIP_DIRS};
+use crate::generator::template_copy::{COPY_SKIP_DIRS, copy_tree, replace_in_file};
 
 const TEMPLATE_PACKAGE: &str = "omium-api-app";
 const TEMPLATE_LIB: &str = "omium_api_app";
@@ -108,11 +108,7 @@ fn patch_identifiers(
     replace_in_file(&root.join("Cargo.toml"), TEMPLATE_PACKAGE, package_name)?;
     replace_in_file(&root.join("Cargo.toml"), TEMPLATE_LIB, lib_name)?;
     replace_in_file(&root.join("src/main.rs"), TEMPLATE_LIB, lib_name)?;
-    replace_in_file(
-        &root.join("src/bin/route_list.rs"),
-        TEMPLATE_LIB,
-        lib_name,
-    )?;
+    replace_in_file(&root.join("src/bin/route_list.rs"), TEMPLATE_LIB, lib_name)?;
 
     replace_in_file(
         &root.join("migration/Cargo.toml"),

@@ -1,7 +1,7 @@
 //! Merge [`RequestPresentation`] into Inertia page props.
 
-use omium_core::presentation::RequestPresentation;
 use inertia_rs::InertiaProps;
+use omium_core::presentation::RequestPresentation;
 
 /// Adds `nav`, `flash`, and `currentPath` props for shared layouts.
 #[must_use]

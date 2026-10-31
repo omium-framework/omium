@@ -173,7 +173,11 @@ mod tests {
         })
         .expect("generate");
         assert!(temp.path().join("demo-api/src/routes/mod.rs").is_file());
-        assert!(temp.path().join("demo-api/src/controllers/mod.rs").is_file());
+        assert!(
+            temp.path()
+                .join("demo-api/src/controllers/mod.rs")
+                .is_file()
+        );
         assert!(temp.path().join("demo-api/config/app.toml").is_file());
     }
 
@@ -199,6 +203,10 @@ mod tests {
                 .join("demo-standard/src/controllers/welcome.rs")
                 .is_file()
         );
-        assert!(temp.path().join("demo-standard/src/models/mod.rs").is_file());
+        assert!(
+            temp.path()
+                .join("demo-standard/src/models/mod.rs")
+                .is_file()
+        );
     }
 }

@@ -8,7 +8,7 @@ use anyhow::{Context, Result, bail};
 use super::omnisan_script::write_app_omnisan_wrapper;
 use crate::generator::new::write_env_example;
 
-use crate::generator::template_copy::{copy_tree, replace_in_file, COPY_SKIP_DIRS};
+use crate::generator::template_copy::{COPY_SKIP_DIRS, copy_tree, replace_in_file};
 
 /// Copies `examples/inertia-vue-app` into `dest` and renames crate identifiers.
 pub fn generate_vue_app(dest: &Path, app_name: &str, force: bool) -> Result<()> {

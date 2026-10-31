@@ -8,7 +8,7 @@ use anyhow::{Context, Result, bail};
 use super::omnisan_script::write_app_omnisan_wrapper;
 use super::template_design;
 use crate::generator::new::write_env_example;
-use crate::generator::template_copy::{copy_tree, replace_in_file, COPY_SKIP_DIRS};
+use crate::generator::template_copy::{COPY_SKIP_DIRS, copy_tree, replace_in_file};
 
 const PACKAGE_PLACEHOLDER: &str = "inertia-react-app";
 const LIB_PLACEHOLDER: &str = "inertia_react_app";
