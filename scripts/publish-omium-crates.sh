@@ -17,7 +17,7 @@ if [[ "$ALLOW_DIRTY" == "1" ]]; then
   EXTRA+=(--allow-dirty)
 fi
 
-ORDER=(omium-core omium-view omium-http omium-db omium-inertia omium-cli)
+ORDER=(omium-core omium-view omium-http omium-db omium-auth omium-inertia omium-cli)
 
 publish_framework() {
   local crate="$1"

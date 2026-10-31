@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/omium-auth",
     "crates/omium-cli",
     "crates/omium-core",
     "crates/omium-db",
@@ -28,6 +29,7 @@ pedantic = "warn"
 # Baseline inventory (D-006–D-015). Crates adopt these in later phases.
 [workspace.dependencies]
 anyhow = "1.0.100"
+argon2 = { version = "0.5.3", features = ["std"] }
 async-trait = "0.1.89"
 askama = "0.14.0"
 axum = "0.8.8"
@@ -59,3 +61,4 @@ tracing-subscriber = { version = "0.3.22", features = ["env-filter", "fmt"] }
 tempfile = "3.24.0"
 assert_cmd = "2.1.1"
 predicates = "3.1.4"
+password-hash = "0.5.0"

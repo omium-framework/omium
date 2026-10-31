@@ -1,0 +1,23 @@
+[package]
+name = "omium-auth"
+description = "Authentication helpers: password hashing, sessions, CSRF, API tokens"
+version.workspace = true
+edition.workspace = true
+publish = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[lib]
+name = "omium_auth"
+
+[dependencies]
+argon2 = { workspace = true }
+password-hash = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

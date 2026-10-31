@@ -1,6 +1,6 @@
 # Authentication and sessions — design proposal (O-003)
 
-**Status:** PROPOSED — awaiting owner approval before any auth code ships.  
+**Status:** APPROVED (**D-020**, owner 2026-11-01). Implementation proceeds **A1 → A7** in order.  
 **Goal:** Laravel-familiar behavior (session login for web, CSRF, optional API tokens) without coupling business logic to Axum or Inertia.
 
 ---
@@ -48,7 +48,7 @@ Update `rules/architecture.md` crate name: **`omium-auth`** (replacing provision
 | Session payload | Server-side store keyed by opaque cookie | Encrypted cookie-only session (later driver) |
 | CSRF | Session-stored token; header `X-XSRF-TOKEN` + form field `_token` (Laravel-like) | Double-submit cookie only (weaker for some flows) |
 | API tokens | DB table `personal_access_tokens` (plain token shown once; store SHA-256 hash) | JWT (stateless revoke is hard) |
-| Email (reset / verify) | **Deferred v1.1** — trait + no-op driver; document hooks | `lettre` + queue (Phase 10) |
+| Email (reset / verify) | **`lettre`** SMTP + dev **[Mailpit](https://github.com/axllent/mailpit)** (Compose service, SMTP `:1025`, UI `:8025`) | Log driver (tests only) |
 
 No new dependency without an entry in `docs/DEPENDENCY_INVENTORY.md` after approval.
 
@@ -66,14 +66,21 @@ No new dependency without an entry in `docs/DEPENDENCY_INVENTORY.md` after appro
 | `Secure` | `true` when `APP_ENV=production` |
 | Path | `/` |
 
-### Store (v1 driver)
+### Store (v1 drivers — owner **C2**)
 
-**Database sessions** (Laravel `database` driver analogue):
+**Database** (Laravel `database` driver):
 
-- Table `sessions`: `id`, `user_id` (nullable), `ip_address`, `user_agent`, `payload` (encrypted JSON blob or serialized), `last_activity`.
-- Cookie holds only session id (random 40+ bytes, base64 or hex).
+- Table `sessions`: `id`, `user_id` (nullable), `ip_address`, `user_agent`, `payload`, `last_activity`.
+- Cookie holds only opaque session id.
 
-**Later drivers:** `redis`, `cookie` (encrypted payload) — same `SessionStore` trait.
+**File** (Laravel `file` driver):
+
+- One file per session under `storage/framework/sessions/` (path configurable).
+- Same cookie id; payload serialized on disk (locked writes).
+
+Config: `config/auth.toml` → `session.driver = "database" | "file"`.
+
+**Later drivers:** `redis`, encrypted cookie — same `SessionStore` trait.
 
 ### Signing key
 
@@ -106,11 +113,12 @@ No new dependency without an entry in `docs/DEPENDENCY_INVENTORY.md` after appro
 - Middleware `RequireApiToken` on `api` routes (configurable).
 - `omnisan make:api-token` or artisan-like command later.
 
-### Not in v1
+### Email (owner **C5**)
 
-- Registration (app can add; generator optional later).
-- Email verification & password reset (design hooks only).
-- “Remember me” long-lived cookie (v1.1).
+- **Email verification** and **password reset** flows ship in v1 (not deferred).
+- **Local dev:** extend root `docker-compose.yml` with **Mailpit**; `config/mail.toml` points SMTP to `127.0.0.1:1025`.
+- **Production:** real SMTP via env (`APP_MAIL__*` overrides).
+- “Remember me” remains **v1.1** (optional long-lived cookie).
 
 ---
 
@@ -136,15 +144,20 @@ New file **`config/auth.toml`** (generated in all web templates):
 
 ```toml
 [session]
-driver = "database"
+driver = "database" # or "file"
 cookie = "omium_session"
 lifetime_minutes = 120
+file_path = "storage/framework/sessions"
 
 [csrf]
 enabled = true
 
-[password]
-# Argon2id parameters (optional overrides)
+[mail]
+driver = "smtp"
+host = "127.0.0.1"
+port = 1025
+from_address = "noreply@omium.local"
+from_name = "Omium"
 ```
 
 Env overrides: `APP_SESSION__SECRET`, `APP_AUTH__SESSION_LIFETIME`, etc. (pattern matches existing `APP_DATABASE__*`).
@@ -173,12 +186,13 @@ Replace demo `web_group` logging middleware in examples/templates when implement
 
 | Phase | Deliverable | Exit |
 |-------|-------------|------|
-| **A1** | `omium-auth` crate: Argon2, `UserCredentials` verify trait | unit tests |
-| **A2** | DB session store + cookie middleware in `omium-http` | integration test with MySQL |
+| **A1** | `omium-auth` crate: Argon2 hash/verify | unit tests ✅ |
+| **A2** | Session stores: **database + file**; cookie middleware in `omium-http` | integration tests |
 | **A3** | CSRF + standard login/logout routes in template | Askama form test |
 | **A4** | Inertia shared `csrfToken` + login page | manual + inertia test |
 | **A5** | Personal access tokens (API template) | bearer auth test |
-| **A6** | `omnisan make:user` / migration in generator | docs |
+| **A6** | Email verify + password reset + Mailpit in Compose | SMTP integration test |
+| **A7** | `omnisan make:user` / auth migrations in generator | docs |
 
 Publish: bump `omium-*` patch versions together; update `OMIUM_REGISTRY_VERSION`.
 
@@ -186,16 +200,16 @@ Publish: bump `omium-*` patch versions together; update `OMIUM_REGISTRY_VERSION`
 
 ## 11. Owner approval checklist
 
-Reply **approve** (or list changes) for each item:
+**Recorded 2026-11-01:**
 
-- [ ] **C1** — New crate **`omium-auth`** + dependencies (`argon2`, `password-hash`, session via DB + signed cookie).
-- [ ] **C2** — Session driver v1 = **database only** (Redis later).
-- [ ] **C3** — CSRF = **session synchronizer token** (Laravel-style `_token` + `X-XSRF-TOKEN`).
-- [ ] **C4** — API auth v1 = **`personal_access_tokens`** table (not JWT).
-- [ ] **C5** — Defer **email verification / password reset / remember-me** to v1.1.
-- [ ] **C6** — Start implementation at **Phase A1** (no full stack in one PR).
+- [x] **C1** — **`omium-auth`** + Argon2 + signed session cookie.
+- [x] **C2** — Session drivers v1 = **`database` and `file`**.
+- [x] **C3** — CSRF = session synchronizer token.
+- [x] **C4** — API = **`personal_access_tokens`** (not JWT).
+- [x] **C5** — **Email verify + password reset** with **Mailpit** for local dev.
+- [x] **C6** — Implement **sequentially** A1 → A7.
 
-When approved, record as **D-020** in `docs/DECISIONS.md` and close **O-003** items tied to v1 scope.
+See **D-020** in `docs/DECISIONS.md`.
 
 ---
 

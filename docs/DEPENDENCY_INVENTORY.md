@@ -14,8 +14,9 @@ This file tracks baseline dependencies aligned with `docs/DECISIONS.md` (D-006â€
 | Views | `askama` | Phase 5 | `omium-view`, `examples/standard`, app templates |
 | Observability | `tracing`, `tracing-subscriber` | Phase 1 | Reserved |
 | Inertia adapter | `inertia_rs` 0.4 (bridge) | Phase 7 | `omium-inertia`, `inertia-vue-app`, spike example |
+| Password hashing | `argon2`, `password-hash` | Phase 9 / A1 | `omium-auth` |
 
-Last updated: Phase 5 Askama views and standard-app templates.
+Last updated: Phase A1 `omium-auth` password hashing (D-020).
 
 ## Version policy
 
