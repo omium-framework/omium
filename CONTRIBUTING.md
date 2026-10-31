@@ -19,7 +19,7 @@ cargo test --workspace
 cargo run -p omium-cli
 ```
 
-CLI subcommands (run from an application root such as `examples/sample-app`):
+CLI subcommands (run from an application root such as `examples/standard`):
 
 ```bash
 cargo run -p omium-cli -- serve --config-dir config

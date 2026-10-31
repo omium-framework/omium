@@ -135,8 +135,8 @@ Deliver:
 | `omnisan self-install` (`cargo install --path … --bin omnisan`) | Done |
 | `./omnisan` → delegate to `~/.cargo/bin/omnisan` when installed | Done |
 | Owner decision **O-001** (library crate names, license) | Partial — CLI crate **`omnisan`** reserved (**D-018**) |
-| Publish `rustbridge-*` libraries to crates.io | Planned |
-| Publish full **`omnisan`** CLI from monorepo (replace placeholder) | Planned |
+| Publish `omium-*` libraries to crates.io | Done (batch bumps as needed) |
+| Publish **`omnisan`** CLI from monorepo | Done |
 | Generator emits `{ version = "…" }` instead of path deps | Planned |
 | End-user docs: `cargo install omnisan` and empty-dir `omnisan new .` | Planned |
 

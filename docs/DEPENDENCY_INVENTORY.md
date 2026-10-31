@@ -11,11 +11,11 @@ This file tracks baseline dependencies aligned with `docs/DECISIONS.md` (D-006â€
 | Serialization | `serde`, `serde_json` | Phase 1+ | Reserved |
 | Errors | `thiserror`, `anyhow` | Phase 1+ | Reserved |
 | CLI | `clap` | Phase 4 | Reserved |
-| Views | `askama` | Phase 5 | `omium-view`, `sample-app` |
+| Views | `askama` | Phase 5 | `omium-view`, `examples/standard`, app templates |
 | Observability | `tracing`, `tracing-subscriber` | Phase 1 | Reserved |
 | Inertia adapter | `inertia_rs` 0.4 (bridge) | Phase 7 | `omium-inertia`, `inertia-vue-app`, spike example |
 
-Last updated: Phase 5 Askama views and sample-app templates.
+Last updated: Phase 5 Askama views and standard-app templates.
 
 ## Version policy
 

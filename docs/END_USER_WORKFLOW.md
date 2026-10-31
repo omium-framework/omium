@@ -6,7 +6,7 @@ This document separates **framework repository layout** (what maintainers need) 
 
 | Role | Sees | Purpose |
 | --- | --- | --- |
-| **Framework maintainer** | Full monorepo: `crates/`, `examples/`, `docs/`, `rules/`, `scripts/` | Implement and ship `rustbridge-*` libraries and `omnisan` |
+| **Framework maintainer** | Full monorepo: `crates/`, `examples/`, `docs/`, `rules/`, `scripts/` | Implement and ship `omium-*` libraries and `omnisan` |
 | **Application developer** | One project folder: `src/`, `config/`, `resources/`, `migration/`, `./omnisan` | Build a product; no framework source tree |
 
 Vue application **scaffold source** lives inside the CLI crate:
@@ -20,11 +20,13 @@ It is not copied into the developer’s tree; `./omnisan new` copies it to the c
 1. Clone the Framework repository (contains `crates/`).
 2. From repo root: `./omnisan new my-shop --frontend vue --yes`  
    - Creates `my-shop/` (or `examples/my-shop/`) with a full app.  
-   - `Cargo.toml` uses **path dependencies** to `crates/rustbridge-*` (computed relative to the app path).
+   - `Cargo.toml` uses **path dependencies** to `crates/omium-*` when generated inside the monorepo, or **crates.io version pins** when standalone.
 3. If the app sits in the workspace, add `my-shop` and `my-shop/migration` to root `Cargo.toml` `[workspace.members]`.
 4. `cd my-shop && ./omnisan install && ./omnisan dev`.
 
-**Limitation:** The Framework checkout (or a tree that contains `crates/omium-core` above the app) must exist. An empty directory on disk with only `omnisan` is **not** enough yet.
+**Monorepo:** Generating inside the Framework clone can use path dependencies and optional workspace membership.
+
+**Standalone:** `omnisan new` outside the clone uses crates.io pins when no ancestor `crates/omium-core` is found.
 
 **Do not** run `./omnisan new` into the template directory inside `crates/omium-cli/templates/`.
 
@@ -47,11 +49,11 @@ Requires owner approval for **O-001** (naming, license) and a **published crate 
 
 | Question | Answer for *now* |
 | --- | --- |
-| Where is the framework? | `crates/rustbridge-*` in the Framework git checkout |
+| Where is the framework? | `crates/omium-*` in the Framework git checkout (also on crates.io) |
 | Where is *your* product code? | Only the folder created by `./omnisan new …` (then `cd` there for features) |
 | Can you use `omnisan new .` today? | **Yes**, if the directory is empty **and** a parent path contains `crates/omium-core` (usually inside the cloned Framework repo) |
-| Random empty folder + global `omnisan` only? | **No** — `new` still needs the monorepo for path dependencies |
-| Does `cargo install omnisan` alone fix that? | **No** — needs published `rustbridge-*` libs + generator version deps (Steps 3–5). Use **`omnisan self-install`** today for a global CLI inside the monorepo. |
+| Random empty folder + global `omnisan` only? | **Yes** when generator emits registry versions (outside monorepo); monorepo `new` still prefers path deps |
+| Does `cargo install omnisan` alone fix that? | **Yes** for standalone apps once registry versions match published crates. Use **`omnisan self-install`** or `cargo install --path crates/omium-cli` while dogfooding the monorepo. |
 
 **Mental model:** `crates/` = framework engine (our code). The app from `new` = your product (like a Laravel project tree).
 
@@ -73,12 +75,12 @@ Generated apps outside the monorepo need a **self-contained** root `Cargo.toml` 
 
 ### Step 3 — Publish framework crates
 
-Publish to crates.io (names per **O-001** / **D-018**):
+Publish to crates.io (names per **O-001** / **D-019**):
 
-- `omium-core`, `omium-http`, `omium-db`, `omium-inertia`, … (public names TBD; may become `omium-*`)
-- CLI: crate **[`omnisan`](https://crates.io/crates/omnisan)** — owner placeholder **0.1.0** published; monorepo **`omium-cli`** maps here on release (`cargo install omnisan`).
+- [x] `omium-core`, `omium-http`, `omium-db`, `omium-inertia`, `omium-view`, … (batch version bumps as needed)
+- [x] CLI: **[`omnisan`](https://crates.io/crates/omnisan)** from `omium-cli`
 
-Generator switches from `{ path = "…" }` to `{ version = "…" }` for released versions.
+Generator uses `{ version = "…" }` for standalone apps; monorepo `new` may still rewrite to path deps.
 
 ### Step 4 — Install CLI globally
 
