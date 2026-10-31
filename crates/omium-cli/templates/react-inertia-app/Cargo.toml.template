@@ -1,0 +1,46 @@
+[package]
+name = "inertia-react-app"
+default-run = "inertia-react-app"
+description = "React + Inertia application base (Omium starter)"
+version = "0.0.0"
+edition.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[lib]
+name = "inertia_react_app"
+path = "src/lib.rs"
+
+[[bin]]
+name = "inertia-react-app"
+path = "src/main.rs"
+
+[[bin]]
+name = "route-list"
+path = "src/bin/route_list.rs"
+doc = false
+
+[dependencies]
+axum = { workspace = true }
+omium-core = { path = "../../crates/omium-core" }
+omium-db = { path = "../../crates/omium-db" }
+omium-http = { path = "../../crates/omium-http" }
+omium-inertia = { path = "../../crates/omium-inertia", features = [
+    "inertia-rs",
+] }
+sea-orm = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+omium-view = { path = "../../crates/omium-view" }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tower-http = { workspace = true, features = ["fs"] }
+tracing = { workspace = true }
+
+[dev-dependencies]
+http-body-util = "0.1"
+inertia_rs = { version = "0.4.0", default-features = false, features = ["axum"] }
+inertia_react_app_migration = { path = "./migration", package = "inertia-react-app-migration" }
+tower = { workspace = true }

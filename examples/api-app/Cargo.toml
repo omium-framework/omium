@@ -1,0 +1,44 @@
+[package]
+name = "api-app"
+default-run = "api-app"
+description = "Omium JSON API application base"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[lib]
+name = "api_app"
+path = "src/lib.rs"
+
+[[bin]]
+name = "api-app"
+path = "src/main.rs"
+
+[[bin]]
+name = "route-list"
+path = "src/bin/route_list.rs"
+doc = false
+
+[dependencies]
+axum = "0.8.8"
+omium-core = { path = "../../crates/omium-core" }
+omium-db = { path = "../../crates/omium-db" }
+omium-http = { path = "../../crates/omium-http" }
+omium-view = { path = "../../crates/omium-view" }
+sea-orm = { version = "1.1.19", default-features = false, features = ["macros", "runtime-tokio-rustls", "sqlx-mysql", "with-chrono"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+thiserror = "2.0.17"
+tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread", "signal"] }
+tower-http = { version = "0.6.8", features = ["fs"] }
+tracing = "0.1.44"
+
+[dev-dependencies]
+http-body-util = "0.1"
+api_app_migration = { path = "./migration", package = "api-app-migration" }
+tower = "0.5.2"
+
+# Generated app — not a member of the Framework workspace.
+[workspace]
+members = [".", "migration"]
+resolver = "2"

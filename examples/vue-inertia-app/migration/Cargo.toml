@@ -1,0 +1,21 @@
+[package]
+name = "vue-inertia-app-migration"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[lib]
+name = "vue_inertia_app_migration"
+path = "src/lib.rs"
+
+[[bin]]
+name = "inertia-vue-migrate"
+path = "src/main.rs"
+
+[dependencies]
+async-trait = "0.1.89"
+omium-core = { path = "../../../crates/omium-core" }
+omium-db = { path = "../../../crates/omium-db" }
+sea-orm-migration = { version = "1.1.19", default-features = false, features = ["runtime-tokio-rustls", "sqlx-mysql"] }
+thiserror = "2.0.17"
+tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread", "signal"] }

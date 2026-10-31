@@ -1,0 +1,9 @@
+/target/
+**/target/
+node_modules/
+public/build/
+**/*.rs.bk
+.DS_Store
+.env
+.env.*
+!.env.example

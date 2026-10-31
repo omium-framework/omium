@@ -123,6 +123,31 @@ Exit criteria:
 - protocol integration tests pass;
 - API/domain logic remains shared.
 
+## Phase 7.1 — Omnisan on PATH and crates.io CLI (planned)
+
+Does **not** block Phase 7 app/template work. Tracks distribution only.
+
+Deliver:
+
+| Item | Status |
+| --- | --- |
+| `omnisan` / `rustbridge` binaries in `omium-cli` | Done |
+| `omnisan self-install` (`cargo install --path … --bin omnisan`) | Done |
+| `./omnisan` → delegate to `~/.cargo/bin/omnisan` when installed | Done |
+| Owner decision **O-001** (library crate names, license) | Partial — CLI crate **`omnisan`** reserved (**D-018**) |
+| Publish `rustbridge-*` libraries to crates.io | Planned |
+| Publish full **`omnisan`** CLI from monorepo (replace placeholder) | Planned |
+| Generator emits `{ version = "…" }` instead of path deps | Planned |
+| End-user docs: `cargo install omnisan` and empty-dir `omnisan new .` | Planned |
+
+Exit criteria:
+
+- `cargo install omnisan` (or approved equivalent) installs a working CLI on a clean machine with Rust only;
+- `omnisan --version` and `omnisan new` work **without** a Framework git clone once Steps 3–5 are complete;
+- monorepo developers can keep using `self-install` or path install until publish.
+
+**Execution rule:** do not publish to crates.io or rename the CLI crate publicly until **O-001** is approved.
+
 ## Phase 8 — API-only experience
 
 Deliver:

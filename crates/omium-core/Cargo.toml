@@ -1,0 +1,27 @@
+[package]
+name = "omium-core"
+description = "Framework-independent primitives, errors, and configuration contracts"
+version.workspace = true
+edition.workspace = true
+publish = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[lib]
+name = "omium_core"
+
+[dependencies]
+serde = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+toml = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+dotenvy = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

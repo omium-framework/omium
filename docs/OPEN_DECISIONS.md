@@ -4,19 +4,21 @@ These questions are intentionally not decided by the AI agent.
 
 ## O-001 — Public product identity
 - Framework name.
-- CLI command name.
-- Crate namespace.
-- License.
+- ~~CLI crates.io crate name~~ — **decided:** [`omnisan`](https://crates.io/crates/omnisan) (see **D-018**); command **`omnisan`** (**D-017**).
+- **Product placeholder on crates.io:** [`omium`](https://crates.io/crates/omium).
+- ~~Crate namespace for published libraries~~ — **decided:** **`omium-*`** on crates.io and in monorepo (**D-019**).
+- ~~License (CLI)~~ — MIT on published crates (matches workspace).
 - Domain and visual identity.
-**Required:** owner decision before public package publishing.
+**Remaining:** framework marketing name, domain, and visual identity before claiming a stable public **1.0** release.
 
 ## O-002 — Inertia Rust adapter
-Candidates to evaluate:
-- `inertia-omega`
-- `inertia_rs`
-- official-protocol implementation behind our own adapter, only if existing options fail review.
 
-**Required:** technical spike and owner approval before production integration.
+Candidates evaluated in Phase 6: see **`docs/INERTIA_SPIKE_REPORT.md`**.
+
+- `inertia-omega` — official ALPHA, git/path, MSRV 1.99
+- `inertia_rs` — crates.io 0.4, Axum spike in repo
+
+**Required:** owner records choice in D-013 (approve one path, defer MSRV, or reject both).
 
 ## O-003 — Authentication and sessions
 Choose architecture and maintained crates for:

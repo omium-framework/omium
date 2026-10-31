@@ -1,6 +1,6 @@
 # Instructions for AI coding agents
 
-You are implementing RustBridge, a Rust-native web framework. The owner is highly experienced in PHP/Laravel and web application engineering, but is learning Rust from zero.
+You are implementing Omium, a Rust-native web framework. The owner is highly experienced in PHP/Laravel and web application engineering, but is learning Rust from zero.
 
 ## Mandatory reading
 

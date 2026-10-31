@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for contributing to RustBridge. This repository combines framework code, architecture decisions, and AI agent rules.
+Thank you for contributing to Omium. This repository combines framework code, architecture decisions, and AI agent rules.
 
 ## Before you change code
 
@@ -16,17 +16,18 @@ From the repository root:
 cargo fmt --all
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace
-cargo run -p rustbridge-cli
+cargo run -p omium-cli
 ```
 
 CLI subcommands (run from an application root such as `examples/sample-app`):
 
 ```bash
-cargo run -p rustbridge-cli -- serve --config-dir config
-cargo run -p rustbridge-cli -- doctor --config-dir config
-cargo run -p rustbridge-cli -- route:list
-cargo run -p rustbridge-cli -- new my-api --frontend api --yes
-cargo run -p rustbridge-cli -- make:service Product --yes
+cargo run -p omium-cli -- serve --config-dir config
+cargo run -p omium-cli -- doctor --config-dir config
+cargo run -p omium-cli -- route:list
+cargo run -p omium-cli -- new my-api --frontend api --yes
+cargo run -p omium-cli -- new my-web --frontend standard --yes
+cargo run -p omium-cli -- make:service Product --yes
 ```
 
 Generated `new` apps require a nearby `crates/` directory (monorepo layout). Overwriting existing generator output requires `--yes`.

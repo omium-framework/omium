@@ -2,26 +2,70 @@
 
 ## CLI goals
 
-Provide a Laravel Artisan-like workflow while remaining a Cargo-native Rust project. Clap is the selected CLI parsing library. The public CLI binary name is not approved yet.
+Provide a Laravel Artisan-like workflow while remaining a Cargo-native Rust project. Clap is the selected CLI parsing library.
 
-## Proposed commands
+**Approved binaries (D-017):** `omnisan` and `rustbridge` (same commands).
 
-The command prefix below is a placeholder and must not be published until the CLI name is approved.
+### Run without global install (required workflow)
+
+Use **`./omnisan`** only — same idea as Laravel's `php artisan` / `./artisan`. Do **not** use `cargo omnisan`; the wrapper invokes Cargo internally.
+
+| Where you are | Example |
+| --- | --- |
+| Application directory | `./omnisan install` then `./omnisan dev` |
+| Framework repo root | `./omnisan doctor` |
+
+First invocation compiles the CLI once; later runs are fast. No global install on the machine or server.
+
+## Commands (all via `./omnisan`)
 
 ```bash
-<cli> new my-app
-<cli> serve
-<cli> make:controller ProductController
-<cli> make:model Product
-<cli> make:migration create_products_table
-<cli> migrate
-<cli> migrate:status
-<cli> route:list
-<cli> test
-<cli> doctor
+./omnisan install       # npm install (Vue/Inertia apps)
+./omnisan dev           # Vite HMR + cargo watch (Rust auto-restart on src changes)
+./omnisan dev --no-rust-watch   # single cargo run (manual restart)
+./omnisan serve         # debug Vue apps → same as dev; production use --production
+./omnisan serve --production   # built assets from public/build only
+./omnisan build         # npm run build (+ optional --release)
+./omnisan migrate
+./omnisan run           # cargo run without starting Vite
+./omnisan route:list    # app routes (Vue apps with src/bin/route_list.rs)
+./omnisan new my-app --frontend vue --app-name Omium
+./omnisan doctor
 ```
 
+### Vue local development vs production build
+
+| Goal | Command |
+| --- | --- |
+| Edit `.vue` files with hot reload | `./omnisan dev` or `./omnisan serve` (debug apps auto-start Vite) |
+| Test production assets | `./omnisan build` then `./omnisan serve --production` |
+
+After `./omnisan build`, debug mode reloads the Vite manifest on each request (no Rust restart). In production (`debug = false`), restart the server after a frontend build.
+
+### Rust hot reload (`cargo-watch`)
+
+`./omnisan dev` runs **`cargo watch -x run …`** so controller/route/service changes recompile and restart the HTTP process. If `cargo-watch` is not installed yet, **`./omnisan dev` or `./omnisan install` runs `cargo install cargo-watch` once** (requires network).
+
+Use `./omnisan dev --no-rust-watch` if you prefer a single long-lived `cargo run`.
+
 ## `new` command
+
+```bash
+./omnisan new examples/my-shop
+```
+
+When flags are omitted and the terminal is interactive, omnisan asks for:
+
+1. **Application name** (default: title case from folder name, e.g. `My Shop`)
+2. **Frontend mode** — `standard`, `vue` (default), `api`, or `react`
+
+Non-interactive (CI/script):
+
+```bash
+./omnisan new examples/my-shop --frontend vue --app-name "Acme Shop" --yes --no-interaction
+```
+
+Framework `crates/` is discovered by walking up from the target path (works for `examples/*` nested apps).
 
 Must prompt for:
 1. Application name.

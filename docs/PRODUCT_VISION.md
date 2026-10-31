@@ -2,7 +2,7 @@
 
 ## Working definition
 
-RustBridge is a Rust-native web application framework with a Laravel-inspired developer experience. The codename is provisional and is not a public naming decision.
+Omium is a Rust-native web application framework with a Laravel-inspired developer experience. The codename is provisional and is not a public naming decision.
 
 ## Mission
 

@@ -1,7 +1,7 @@
 services:
   mysql:
     image: mysql:8.4
-    container_name: rustbridge-mysql-dev
+    container_name: omium-mysql-dev
     restart: unless-stopped
     ports:
       - "3306:3306"
@@ -18,7 +18,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:5
-    container_name: rustbridge-phpmyadmin-dev
+    container_name: omium-phpmyadmin-dev
     restart: unless-stopped
     ports:
       - "8081:80"

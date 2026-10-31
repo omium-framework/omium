@@ -35,23 +35,25 @@ Do not expose these containers to the public internet; they are for local develo
 
 ## Enable database in sample-app
 
-1. Set password via environment (never commit passwords):
+1. One-time setup (Laravel `.env` gibi — her `dev`/`serve` öncesi export gerekmez):
 
 ```bash
-export APP_DATABASE__PASSWORD=omium
-export APP_DATABASE__ENABLED=true
+cd examples/sample-app
+./omnisan install    # .env.example → .env (APP_DATABASE__PASSWORD=omium)
 ```
+
+Uygulama açılırken `config/` yanındaki `.env` otomatik okunur; şifre varsa `database.enabled` açılır.
 
 2. Apply migrations (explicit deployment step — not run on app boot):
 
 ```bash
-cargo run -p sample-app-migration
+./omnisan migrate
 ```
 
 3. Start the HTTP server:
 
 ```bash
-cargo run -p sample-app
+./omnisan dev
 ```
 
 ## Optional integration tests
@@ -60,11 +62,11 @@ When MySQL is running:
 
 ```bash
 export RUSTBRIDGE_TEST_MYSQL_URL=mysql://omium:omium@127.0.0.1:3306/omium
-cargo test -p rustbridge-db --test mysql_integration -- --ignored
+cargo test -p omium-db --test mysql_integration -- --ignored
 ```
 
 ## Laravel comparison
 
 - `.env` `DB_*` values ↔ `config/database.toml` + `APP_DATABASE__*` overrides
-- `php artisan migrate` ↔ `cargo run -p sample-app-migration`
+- `php artisan migrate` ↔ `omnisan migrate` (or `cargo run --manifest-path migration/Cargo.toml`)
 - Eloquent model ↔ `examples/sample-app/src/models/*.rs` SeaORM entities

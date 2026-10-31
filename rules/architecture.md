@@ -2,14 +2,14 @@
 
 ## Layer boundaries
 
-1. `rustbridge-core`: framework-independent primitives, errors, config abstractions, application state contracts.
-2. `rustbridge-http`: Axum integration, routing helpers, extractors, response abstractions, middleware integration.
-3. `rustbridge-db`: SeaORM integration, connection configuration, repository conventions, transactions.
-4. `rustbridge-inertia`: Inertia protocol integration and frontend asset manifest integration.
-5. `rustbridge-view`: Standard server-rendered view integration using Askama.
-6. `rustbridge-cli`: project creation, commands, generators, migrations, dev server orchestration.
+1. `omium-core`: framework-independent primitives, errors, config abstractions, application state contracts.
+2. `omium-http`: Axum integration, routing helpers, extractors, response abstractions, middleware integration.
+3. `omium-db`: SeaORM integration, connection configuration, repository conventions, transactions.
+4. `omium-inertia`: Inertia protocol integration and frontend asset manifest integration.
+5. `omium-view`: Standard server-rendered view integration using Askama.
+6. `omium-cli`: project creation, commands, generators, migrations, dev server orchestration.
 7. `rustbridge-auth`: authentication/session/CSRF only after the security design is approved.
-8. `rustbridge-testing`: test helpers and assertions.
+8. `omium-testing`: test helpers and assertions.
 9. Application code lives in the generated app, not inside framework crates.
 
 Names are provisional package identifiers. Before publishing crates or selecting a public namespace, obtain owner approval. Internal workspace crate names may use a temporary consistent prefix.

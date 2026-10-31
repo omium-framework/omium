@@ -84,6 +84,7 @@ Requirements:
 - Inertia visits return the correct JSON page object and headers.
 - Implement asset versioning and stale asset handling.
 - Implement redirects and validation errors correctly.
+- Vue mode reference: `ValidationErrors` → `validation_errors_prop()` → Inertia `errors` page prop; failed POST re-renders the same component with field messages (see `examples/inertia-vue-app`). POST bodies use `InertiaForm` (`application/json` from `@inertiajs` visits, or classic form-urlencoded).
 - Support shared props and partial reloads before calling the integration production-ready.
 - Advanced protocol features (deferred props, merge props, once props, history encryption, infinite scroll, SSR) must be individually tested and marked supported/unsupported.
 - SSR is deferred from the initial release.

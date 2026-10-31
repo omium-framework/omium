@@ -1,0 +1,27 @@
+[package]
+name = "omium-view"
+description = "Server-rendered views using Askama"
+version.workspace = true
+edition.workspace = true
+publish = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[lib]
+name = "omium_view"
+
+[package.metadata.askama]
+dirs = ["templates"]
+
+[dependencies]
+askama = { workspace = true }
+axum = { workspace = true }
+omium-core = { path = "../omium-core", version = "0.1.4" }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]

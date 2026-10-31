@@ -1,0 +1,21 @@
+[package]
+name = "omium-api-app-migration"
+version = "0.0.0"
+edition.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[lib]
+name = "omium_api_app_migration"
+path = "src/lib.rs"
+
+[[bin]]
+name = "omium-api-migrate"
+path = "src/main.rs"
+
+[dependencies]
+async-trait = { workspace = true }
+sea-orm-migration = { workspace = true }
+tokio = { workspace = true }

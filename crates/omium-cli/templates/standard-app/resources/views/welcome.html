@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}Welcome{% endblock %}
+{% block header_title %}Welcome{% endblock %}
+{% block header_subtitle %}Server-rendered HTML with the same dark Omium starter look as Vue and React apps.{% endblock %}
+
+{% block content %}
+<section class="welcome-hero">
+  <div class="welcome-glow" aria-hidden="true"></div>
+  <p class="hero-eyebrow">You're all set</p>
+  <h2 class="hero-title">{{ greeting }}</h2>
+  <p class="hero-lead">{{ hint }}</p>
+  <div class="pill-row">
+    <span class="pill pill-accent">{{ mode_label }}</span>
+    <span class="pill">Axum</span>
+    <span class="pill">Askama</span>
+    <span class="pill">Omium</span>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-tile">
+      <strong>Typed views</strong>
+      <span>Compile-time checked templates and context structs.</span>
+    </div>
+    <div class="feature-tile">
+      <strong>No Node required</strong>
+      <span>Ship HTML from Rust without a frontend build step.</span>
+    </div>
+    <div class="feature-tile">
+      <strong>Same visual language</strong>
+      <span>Swap to Vue or React later without redesigning the shell.</span>
+    </div>
+  </div>
+</section>
+{% endblock %}

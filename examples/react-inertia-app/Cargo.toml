@@ -1,0 +1,48 @@
+[package]
+name = "react-inertia-app"
+default-run = "react-inertia-app"
+description = "React + Inertia application base (Omium starter)"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[lib]
+name = "react_inertia_app"
+path = "src/lib.rs"
+
+[[bin]]
+name = "react-inertia-app"
+path = "src/main.rs"
+
+[[bin]]
+name = "route-list"
+path = "src/bin/route_list.rs"
+doc = false
+
+[dependencies]
+axum = "0.8.8"
+omium-core = { path = "../../crates/omium-core" }
+omium-db = { path = "../../crates/omium-db" }
+omium-http = { path = "../../crates/omium-http" }
+omium-inertia = { path = "../../crates/omium-inertia", features = [
+    "inertia-rs",
+] }
+sea-orm = { version = "1.1.19", default-features = false, features = ["macros", "runtime-tokio-rustls", "sqlx-mysql", "with-chrono"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+omium-view = { path = "../../crates/omium-view" }
+thiserror = "2.0.17"
+tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread", "signal"] }
+tower-http = { version = "0.6.8", features = ["fs"] }
+tracing = "0.1.44"
+
+[dev-dependencies]
+http-body-util = "0.1"
+inertia_rs = { version = "0.4.0", default-features = false, features = ["axum"] }
+react_inertia_app_migration = { path = "./migration", package = "react-inertia-app-migration" }
+tower = "0.5.2"
+
+# Generated app — not a member of the Framework workspace.
+[workspace]
+members = [".", "migration"]
+resolver = "2"

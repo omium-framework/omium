@@ -44,7 +44,37 @@ Use Inertia's server-driven SPA model as the reference for Vue/React integration
 
 Owner approved starting Phase 0 using the PROPOSED baseline stack (D-006–D-012, D-014–D-015) and provisional internal crate/binary prefix `rustbridge-*` until public naming (O-001) is decided.
 
-## Technical baseline selected for the blueprint
+### D-017 — Development CLI binary `omnisan`
+**Status: APPROVED**
+
+Owner approved **`omnisan`** as the Laravel Artisan-style developer CLI binary name alongside the provisional `rustbridge` binary (same entry point, two `[[bin]]` targets). Public packaging may still reconcile names under O-001 before crates.io release.
+
+### D-018 — crates.io CLI crate name `omnisan`
+**Status: APPROVED**
+
+Owner registered and published the placeholder crate **[`omnisan`](https://crates.io/crates/omnisan)** on crates.io (MIT). Target end-user install command:
+
+```bash
+cargo install omnisan
+```
+
+The monorepo crate directory remains **`crates/omium-cli`**; the published library crate is **`omium-cli`** on crates.io. The **`omnisan`** crate ships the `omnisan` binary and depends on **`omium-cli`**. Placeholder **0.1.0** must be superseded by **0.1.1+** with a working binary once **`omium-*`** libraries are published.
+
+### D-019 — crates.io library namespace `omium-*`
+**Status: APPROVED**
+
+Owner approved published library crate names:
+
+| crates.io package | Monorepo path | Rust library name |
+| --- | --- | --- |
+| `omium-core` | `crates/omium-core` | `omium_core` |
+| `omium-http` | `crates/omium-http` | `omium_http` |
+| `omium-db` | `crates/omium-db` | `omium_db` |
+| `omium-view` | `crates/omium-view` | `omium_view` |
+| `omium-inertia` | `crates/omium-inertia` | `omium_inertia` |
+| `omium-cli` | `crates/omium-cli` | `omium_cli` |
+
+Generated apps use `omium-* = {{ version = "…" }}` when no Framework clone is found on disk. Monorepo directories and Rust crate names use the same **`omium-*` / `omium_*`** naming (owner rename, 2025-10).
 
 These are the implementation baseline recommended by this blueprint. A change to a core item requires owner approval.
 
@@ -103,24 +133,13 @@ These are the implementation baseline recommended by this blueprint. A change to
 - Node.js is needed only for Vue/React frontend asset workflows, not API-only Rust builds.
 
 ### D-013 — Inertia Rust adapter
-**Status: OPEN — OWNER APPROVAL REQUIRED AFTER SPIKE**
+**Status: APPROVED (Phase 7 bridge — `inertia_rs` 0.4)**
 
-Evaluate `inertia-omega` and `inertia_rs` against the official Inertia v3 protocol. Do not select solely by popularity or feature claims.
-Required spike report:
-- protocol coverage matrix;
-- initial HTML and JSON responses;
-- asset versioning;
-- redirects and external redirects;
-- validation errors and error bags;
-- shared props;
-- partial reloads;
-- deferred/merge/once props;
-- history behavior;
-- Vite manifest integration;
-- SSR status;
-- license, maintenance, test quality, MSRV;
-- adapter API and ability to wrap it behind our own trait.
-Recommendation must be presented to owner. No production integration before approval.
+Owner direction (Phase 7): integrate the Inertia bridge into the application base (`examples/inertia-vue-app`) using `omium-inertia` + `inertia_rs`. Re-evaluate official **`inertia-omega`** when MSRV policy allows Rust **1.99+** and a pinned release strategy exists.
+
+Production Vue/React apps must use the framework crate boundary (`omium-inertia`), not direct adapter types in application handlers where avoidable.
+
+Spike archive: `docs/INERTIA_SPIKE_REPORT.md`, `examples/inertia-spike/`.
 
 ### D-014 — Observability
 **Status: PROPOSED BASELINE**

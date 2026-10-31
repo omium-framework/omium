@@ -1,0 +1,15 @@
+[package]
+name = "omium-testing"
+description = "Test helpers for Omium applications"
+version.workspace = true
+edition.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[lib]
+name = "omium_testing"
+
+[dependencies]
+omium-core = { path = "../omium-core", version = "0.1.4" }

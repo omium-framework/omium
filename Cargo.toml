@@ -1,21 +1,22 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/rustbridge-cli",
-    "crates/rustbridge-core",
-    "crates/rustbridge-db",
-    "crates/rustbridge-http",
-    "crates/rustbridge-inertia",
-    "crates/rustbridge-testing",
-    "crates/rustbridge-view",
-    "examples/sample-app",
-    "examples/sample-app/migration",
+    "crates/omium-cli",
+    "crates/omium-core",
+    "crates/omium-db",
+    "crates/omium-http",
+    "crates/omium-inertia",
+    "crates/omium-testing",
+    "crates/omium-view",
 ]
 
 [workspace.package]
-version = "0.0.0"
+version = "0.1.4"
 edition = "2024"
 publish = false
+authors = ["Orhan MUSELLİM <info@orhanmusellim.com>"]
+license = "MIT"
+repository = "https://github.com/omium-framework"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
@@ -48,6 +49,7 @@ sqlx = { version = "0.8.6", default-features = false, features = [
     "mysql",
 ] }
 thiserror = "2.0.17"
+dotenvy = "0.15.7"
 tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread", "signal"] }
 toml = "0.8.23"
 tower = "0.5.2"

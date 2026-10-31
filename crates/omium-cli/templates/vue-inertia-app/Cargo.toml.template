@@ -1,0 +1,46 @@
+[package]
+name = "inertia-vue-app"
+default-run = "inertia-vue-app"
+description = "Phase 7 Vue + Inertia application base (Omium demo)"
+version = "0.0.0"
+edition.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[lib]
+name = "inertia_vue_app"
+path = "src/lib.rs"
+
+[[bin]]
+name = "inertia-vue-app"
+path = "src/main.rs"
+
+[[bin]]
+name = "route-list"
+path = "src/bin/route_list.rs"
+doc = false
+
+[dependencies]
+axum = { workspace = true }
+omium-core = { path = "../../crates/omium-core" }
+omium-db = { path = "../../crates/omium-db" }
+omium-http = { path = "../../crates/omium-http" }
+omium-inertia = { path = "../../crates/omium-inertia", features = [
+    "inertia-rs",
+] }
+sea-orm = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+omium-view = { path = "../../crates/omium-view" }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tower-http = { workspace = true, features = ["fs"] }
+tracing = { workspace = true }
+
+[dev-dependencies]
+http-body-util = "0.1"
+inertia_rs = { version = "0.4.0", default-features = false, features = ["axum"] }
+inertia_vue_app_migration = { path = "./migration", package = "inertia-vue-app-migration" }
+tower = { workspace = true }

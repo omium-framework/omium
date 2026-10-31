@@ -11,9 +11,9 @@ This file tracks baseline dependencies aligned with `docs/DECISIONS.md` (D-006�
 | Serialization | `serde`, `serde_json` | Phase 1+ | Reserved |
 | Errors | `thiserror`, `anyhow` | Phase 1+ | Reserved |
 | CLI | `clap` | Phase 4 | Reserved |
-| Views | `askama` | Phase 5 | `rustbridge-view`, `sample-app` |
+| Views | `askama` | Phase 5 | `omium-view`, `sample-app` |
 | Observability | `tracing`, `tracing-subscriber` | Phase 1 | Reserved |
-| Inertia adapter | TBD (`inertia-omega` / `inertia_rs`) | Phase 6–7 | Not added — D-013 OPEN |
+| Inertia adapter | `inertia_rs` 0.4 (bridge) | Phase 7 | `omium-inertia`, `inertia-vue-app`, spike example |
 
 Last updated: Phase 5 Askama views and sample-app templates.
 
@@ -31,7 +31,7 @@ Only path dependencies between workspace crates are active. No third-party crate
 
 | Crate | Version (lockfile) | Used in |
 | --- | --- | --- |
-| `serde` | workspace / lock | `rustbridge-core` config types |
+| `serde` | workspace / lock | `omium-core` config types |
 | `toml` | 0.8.x | config file parsing |
 | `thiserror` | 2.x | `ConfigError`, `BootstrapError` |
 | `tokio` | 1.x | shutdown signals, CLI/sample `main` |

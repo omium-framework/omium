@@ -1,0 +1,24 @@
+[package]
+name = "inertia-vue-app-migration"
+version = "0.0.0"
+edition.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[lib]
+name = "inertia_vue_app_migration"
+path = "src/lib.rs"
+
+[[bin]]
+name = "inertia-vue-migrate"
+path = "src/main.rs"
+
+[dependencies]
+async-trait = { workspace = true }
+omium-core = { path = "../../../crates/omium-core" }
+omium-db = { path = "../../../crates/omium-db" }
+sea-orm-migration = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }

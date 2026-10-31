@@ -1,0 +1,32 @@
+[package]
+name = "omium-http"
+description = "Axum integration, routing, extractors, and HTTP response abstractions"
+version.workspace = true
+edition.workspace = true
+publish = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[lib]
+name = "omium_http"
+
+[dependencies]
+axum = { workspace = true }
+omium-core = { path = "../omium-core", version = "0.1.4" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+axum = { workspace = true }
+http-body-util = "0.1.3"
+tokio = { workspace = true }
+tower = { workspace = true }

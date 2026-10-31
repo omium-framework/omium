@@ -1,119 +1,253 @@
-# RustBridge — Engineering Blueprint
+# Omium
 
-> **Working codename only.** The public product name, CLI binary name, crate namespace, logo, and domain are NOT approved. Do not publish or rename packages without the owner's explicit approval.
+**Omium** is a Rust-native web stack for HTTP apps, server-rendered HTML, JSON APIs, and Vue/React frontends. Everything flows through one developer tool: **[`omnisan`](https://crates.io/crates/omnisan)** — install it once, then create projects, run dev servers, migrate databases, and scaffold code from any directory.
 
-This repository is the authoritative product, architecture, implementation, and AI-agent instruction package for a Rust-native web application framework aimed first at PHP/Laravel developers.
+Applications are normal **Cargo projects**: compiled Rust, explicit types, `Result`-based errors. Omium libraries (`omium-core`, `omium-http`, `omium-db`, `omium-view`, `omium-inertia`) ship on **[crates.io](https://crates.io/)**; the monorepo in this repository is where those crates and the CLI are developed together.
 
-## Mission
+**Shipped today:** unified app layout (all frontend modes), `omnisan new` (API, Standard, Vue, React), dev/build/migrate generators, Vue + Inertia reference template, Askama standard mode, SeaORM migrations, validation, HTTP middleware. **Roadmap:** auth, queues, extended API tooling — see [`docs/IMPLEMENTATION_ROADMAP.md`](docs/IMPLEMENTATION_ROADMAP.md).
 
-Make modern Rust backend and full-stack development approachable to experienced PHP developers without hiding or replacing the Rust language. Applications written with this framework are real Rust applications, compiled by Cargo, using Rust's type system, ownership model, borrowing rules, and compiler checks.
+---
 
-The framework must provide a Laravel-inspired developer experience:
-- Convention over configuration.
-- Sensible defaults and explicit configuration files.
-- A predictable application structure.
-- A cohesive CLI and code generators.
-- Integrated database, migrations, validation, authentication, queues, cache, and testing.
-- Full-stack options: Standard server-rendered pages, Vue + Inertia, React + Inertia, or API-only.
+## Requirements
 
-## Non-negotiable operating rules
+| Tool | Purpose |
+| --- | --- |
+| [Rust](https://rustup.rs/) (stable, edition 2024) | Build Omium libraries and your apps |
+| [Cargo](https://doc.rust-lang.org/cargo/) | Dependencies and project management |
+| **`omnisan`** | Omium CLI (see below) |
+| [Node.js](https://nodejs.org/) + npm | Vue/React apps (`omnisan install`) |
+| MySQL (optional) | Migrations and database-backed demos |
 
-1. Read `AGENTS.md` and every applicable file under `rules/` before making changes.
-2. Treat `docs/DECISIONS.md` as the approved decision register.
-3. Do not make product, architecture, dependency, security, public API, licensing, or scope decisions that are not already approved.
-4. If a decision is not explicitly settled, stop at that decision, explain options and trade-offs in Turkish, and request owner approval. Do not silently choose a default.
-5. Never claim a feature is complete unless implementation, tests, documentation, and acceptance criteria are complete.
-6. After each completed task, teach the owner in Turkish using a PHP/Laravel comparison, then explain the Rust concepts used.
-7. The owner is an experienced PHP/Laravel developer but a Rust beginner. Do not explain basic web development unnecessarily; explain Rust-specific concepts clearly.
-8. Do not introduce unsafe Rust. `unsafe_code = "forbid"` is the default.
-9. Never weaken security or tests to make a build pass.
-10. Keep the framework frontend-independent at its core.
+---
 
-## Start here
+## Install `omnisan` (start here)
 
-1. `AGENTS.md`
-2. `rules/00-global.md`
-3. `docs/PRODUCT_VISION.md`
-4. `docs/DECISIONS.md`
-5. `docs/ARCHITECTURE.md`
-6. `docs/IMPLEMENTATION_ROADMAP.md`
-7. `docs/ACCEPTANCE_CRITERIA.md`
+From **[crates.io](https://crates.io/crates/omnisan)** (recommended for app developers):
 
-## Document map
+```bash
+cargo install omnisan
+omnisan --version
+```
 
-- `docs/PRODUCT_VISION.md` — audience, positioning, product principles.
-- `docs/DECISIONS.md` — approved choices and approval-required open decisions.
-- `docs/TECH_STACK.md` — technology selections and integration contracts.
-- `docs/ARCHITECTURE.md` — system boundaries, request lifecycle, application structure.
-- `docs/FRONTEND_MODES.md` — Standard, Vue + Inertia, React + Inertia, API-only.
-- `docs/DATABASE_AND_ORM.md` — SeaORM conventions, migrations, SQLx escape hatch.
-- `docs/SECURITY.md` — security baseline and threat model.
-- `docs/CLI_AND_GENERATORS.md` — CLI commands and generator contracts.
-- `docs/TESTING_AND_QUALITY.md` — test strategy and quality gates.
-- `docs/IMPLEMENTATION_ROADMAP.md` — staged delivery plan.
-- `docs/ACCEPTANCE_CRITERIA.md` — definition of done and release gates.
-- `docs/OWNER_LEARNING_PROTOCOL.md` — required PHP-to-Rust teaching format.
-- `docs/DEPENDENCY_POLICY.md` — dependency selection, updates, licenses.
-- `docs/DEPENDENCY_INVENTORY.md` — workspace dependency inventory by phase.
-- `docs/OPEN_DECISIONS.md` — decisions that must be escalated.
-- `rules/` — canonical AI coding rules.
-- `.cursor/rules/` and `.github/copilot-instructions.md` — entry points for common coding agents.
+You do **not** need to clone this repository to build user applications. Clone the repo only if you contribute to Omium itself or work from path dependencies inside the monorepo.
 
-## Important scope boundary
+**Contributors** working inside this checkout can also install from source:
 
-Implementation is incremental per `docs/IMPLEMENTATION_ROADMAP.md`. Phase 0 provides a Cargo workspace skeleton; HTTP, database, and frontend integrations arrive in later phases.
+```bash
+cd Framework
+cargo install --path crates/omium-cli --bin omnisan --locked
+# or: ./omnisan self-install
+```
 
-## Development (Phase 0)
+Ensure `~/.cargo/bin` is on your `PATH`. Generated apps include a local `./omnisan` wrapper that prefers the global binary when present.
 
-Workspace layout:
+Publish order and version alignment: [`docs/CRATES_IO_PUBLISH.md`](docs/CRATES_IO_PUBLISH.md).
+
+---
+
+## Create an application
+
+```bash
+omnisan new my-app --frontend vue --app-name "My App" --yes
+cd my-app
+omnisan install          # Vue/React: npm dependencies
+omnisan dev
+```
+
+**Frontend modes:** `standard` (Askama HTML), `vue`, `react` (Inertia + Vite), `api` (JSON). Every mode uses the **same directory layout** — see [`docs/APP_DIRECTORY_LAYOUT.md`](docs/APP_DIRECTORY_LAYOUT.md).
+
+Interactive prompts when flags are omitted:
+
+```bash
+omnisan new my-app
+```
+
+**Monorepo checkout:** run `omnisan new` from a path under this repo (e.g. `examples/my-app`). The generator rewrites `omium-*` dependencies to `../../crates/…` automatically. Optional: add the app and `my-app/migration` to the root [`Cargo.toml`](Cargo.toml) `[workspace.members]` if you want a single `cargo build --workspace` from the framework root.
+
+Do not generate into `crates/omium-cli/templates/*` — use a new folder.
+
+More detail: [`docs/CLI_AND_GENERATORS.md`](docs/CLI_AND_GENERATORS.md), [`docs/END_USER_WORKFLOW.md`](docs/END_USER_WORKFLOW.md).
+
+---
+
+## Quick start (clone this repo)
+
+For framework hacking or the bundled example:
+
+```bash
+git clone <your-clone-url> Framework
+cd Framework
+cargo build --workspace
+omnisan doctor
+```
+
+**Standard (Askama) example:**
+
+```bash
+cd examples/standart
+omnisan dev
+# http://127.0.0.1:8080/  (default port from config/server.toml)
+```
+
+**New Vue app from template** (any directory, crates.io deps):
+
+```bash
+omnisan new ~/Projects/demo --frontend vue --app-name Demo --yes
+cd ~/Projects/demo
+omnisan install
+export APP_DATABASE__ENABLED=true APP_DATABASE__PASSWORD=omium   # optional
+omnisan migrate
+omnisan dev
+```
+
+| Service | URL (Vue dev defaults) |
+| --- | --- |
+| Rust HTTP | http://127.0.0.1:3002 |
+| Vite (started by `omnisan dev`) | http://127.0.0.1:5173 |
+
+Production assets: `omnisan build` then `omnisan serve --production`. Routes: `omnisan route:list`.
+
+---
+
+## Daily commands (`omnisan`)
+
+Run inside an **application directory** (contains `Cargo.toml` and `config/`):
+
+| Command | Purpose |
+| --- | --- |
+| `omnisan install` | Frontend dependencies (Vue/React) |
+| `omnisan dev` | Dev server; Vite HMR + Rust reload where configured |
+| `omnisan serve` | Same family as `dev`; `--production` for built assets |
+| `omnisan build` | Frontend build; optional `--release` for Rust |
+| `omnisan migrate` | SeaORM migrations in `migration/` |
+| `omnisan run` | Rust server only (no Vite) |
+| `omnisan route:list` | Print registered routes |
+| `omnisan doctor` | Environment and config checks |
+| `omnisan make:controller` / `make:model` / `make:migration` / `make:service` | Code stubs (wire routes yourself) |
+
+---
+
+## Application layout (all modes)
+
+Same tree for **API**, **Standard**, **Vue**, and **React**:
+
+```text
+config/                 # app, server, logging, database (TOML)
+migration/              # SeaORM migrations
+resources/
+  css/                  # Shared styles
+  js/                   # Vite entry (Vue/React)
+  views/                # HTML (Standard) or pages/layouts (Inertia)
+src/
+  app/                  # Bootstrap, shared state, errors
+  controllers/          # HTTP handlers
+  routes/               # Route registration + route:list manifest
+  models/               # SeaORM entities
+  services/             # Application services
+  forms/                # Input / validation helpers
+  middleware/           # Web and API middleware groups
+  http/                 # Rendering helpers (HTML, Inertia, JSON)
+  views/                # Askama template structs → resources/views
+  runtime.rs            # Server lifecycle
+  main.rs
+omnisan                   # Local CLI wrapper (optional)
+```
+
+Full guide: [`docs/APP_DIRECTORY_LAYOUT.md`](docs/APP_DIRECTORY_LAYOUT.md).
+
+---
+
+## Add a feature (typical flow)
+
+From your app directory:
+
+1. **`omnisan make:controller Product --yes`** → `src/controllers/product.rs`; add `pub mod product;` and a route in `src/routes/mod.rs`; update `src/routes/manifest.rs`.
+2. **`omnisan make:model Product --yes`** → entity under `src/models/` — see [`docs/DATABASE_AND_ORM.md`](docs/DATABASE_AND_ORM.md).
+3. **`omnisan make:migration create_products_table --yes`** → implement migration, register in `migration/src/lib.rs`, then **`omnisan migrate`**.
+4. **`omnisan make:service Product --yes`** (optional) → call from controllers.
+
+Standard mode: add `resources/views/*.html` and matching `src/views/*.rs` Askama structs. Vue/React: add `resources/js/Pages/*` (and optional `resources/js/Layouts/*`) and return Inertia from the controller.
+
+---
+
+## Configuration
+
+- **`config/`** — committed defaults (`app.toml`, `server.toml`, `logging.toml`, `database.toml`)
+- **`.env`** — local overrides from `.env.example`; never commit secrets
+- **Environment keys:** `APP_` prefix, `__` for nesting — e.g. `APP_NAME`, `APP_SERVER__PORT`, `APP_DATABASE__PASSWORD`
+
+Database passwords belong in the environment, not in TOML. Local MySQL: [`docs/LOCAL_MYSQL.md`](docs/LOCAL_MYSQL.md).
+
+---
+
+## Examples in this repository
+
+| Path | Description |
+| --- | --- |
+| [`examples/standart`](examples/standart/) | Standard (Askama) app — unified layout, `./omnisan dev` |
+
+Additional reference apps are produced by **`omnisan new`** (Vue/React templates live under `crates/omium-cli/templates/`).
+
+---
+
+## Framework development (contributors)
+
+```bash
+cargo fmt --all
+cargo test --workspace
+cargo clippy --workspace --all-targets --all-features -- -D warnings   # when applicable
+```
+
+Read [`AGENTS.md`](AGENTS.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md). Decisions: [`docs/DECISIONS.md`](docs/DECISIONS.md). Open questions: [`docs/OPEN_DECISIONS.md`](docs/OPEN_DECISIONS.md).
+
+After CLI or generator changes, publish to crates.io per [`docs/CRATES_IO_PUBLISH.md`](docs/CRATES_IO_PUBLISH.md).
+
+### Workspace crates
 
 ```text
 crates/
-├── rustbridge-core
-├── rustbridge-http
-├── rustbridge-db
-├── rustbridge-view
-├── rustbridge-inertia
-├── rustbridge-cli      # provisional binary name: rustbridge
-└── rustbridge-testing
+├── omium-core      # bootstrap, config, app state
+├── omium-http      # HTTP server, default middleware
+├── omium-db        # database integration
+├── omium-view      # server-rendered views
+├── omium-inertia   # Inertia adapter
+├── omium-cli       # omnisan library + generator templates
+└── omium-testing   # test helpers
 ```
 
-Commands:
+Published binary crate: **[`omnisan`](https://crates.io/crates/omnisan)** (wraps `omium-cli`).
 
-```bash
-cargo build --workspace
-cargo test --workspace
-cargo run -p rustbridge-cli
-cargo run -p sample-app
-```
+---
 
-Sample app config lives in `examples/sample-app/config/`. Environment overrides use the `APP_` prefix (for example `APP_NAME`, `APP_DEBUG`, `APP_LOGGING__LEVEL`, `APP_SERVER__PORT`). Database passwords must be set with `APP_DATABASE__PASSWORD`, not TOML files.
+## Documentation
 
-Run the sample HTTP server:
+| Document | Content |
+| --- | --- |
+| [`docs/APP_DIRECTORY_LAYOUT.md`](docs/APP_DIRECTORY_LAYOUT.md) | Unified app folder structure |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Request lifecycle, boundaries |
+| [`docs/CLI_AND_GENERATORS.md`](docs/CLI_AND_GENERATORS.md) | CLI and generators |
+| [`docs/FRONTEND_MODES.md`](docs/FRONTEND_MODES.md) | Standard, Vue, React, API |
+| [`docs/CRATES_IO_PUBLISH.md`](docs/CRATES_IO_PUBLISH.md) | Registry publish workflow |
+| [`docs/SECURITY.md`](docs/SECURITY.md) | Security baseline |
+| [`docs/IMPLEMENTATION_ROADMAP.md`](docs/IMPLEMENTATION_ROADMAP.md) | Planned vs shipped |
+| [`rules/`](rules/) | Rules for agents and contributors |
 
-```bash
-cargo run -p sample-app
-curl -s http://127.0.0.1:8080/          # HTML home (Askama + layout)
-curl -s http://127.0.0.1:8080/examples/new  # form + validation demo
-curl -s http://127.0.0.1:8080/health
-```
+---
 
-From `examples/sample-app`, the CLI can bootstrap the same config and serve the framework default router (health only):
+## Security
 
-```bash
-cd examples/sample-app
-cargo run -p rustbridge-cli -- serve --config-dir config
-```
+See [`docs/SECURITY.md`](docs/SECURITY.md). Do not commit `.env` or credentials. Workspace forbids `unsafe` in production crates (`unsafe_code = "forbid"`).
 
-For the demo home page with database listing, always use `cargo run -p sample-app`.
+---
 
-Default application name is **Omium** (override with `APP_NAME` or `config/app.toml`).
+## License
 
-MySQL (Phase 3): see `docs/LOCAL_MYSQL.md` and `docker compose up -d` (MySQL on `3306`, phpMyAdmin on `http://127.0.0.1:8081`), then:
+License terms are **not yet published** in this repository. See [`docs/OPEN_DECISIONS.md`](docs/OPEN_DECISIONS.md) until public terms are approved.
 
-```bash
-export APP_DATABASE__ENABLED=true APP_DATABASE__PASSWORD=omium
-cargo run -p sample-app-migration
-```
+---
 
-See `CONTRIBUTING.md` and `docs/DEPENDENCY_INVENTORY.md`.
+## Support and contribution
+
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- [`docs/DEPENDENCY_POLICY.md`](docs/DEPENDENCY_POLICY.md)
+- [`docs/PRODUCT_VISION.md`](docs/PRODUCT_VISION.md)
