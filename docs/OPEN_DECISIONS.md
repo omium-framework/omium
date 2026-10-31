@@ -21,7 +21,11 @@ Candidates evaluated in Phase 6: see **`docs/INERTIA_SPIKE_REPORT.md`**.
 **Required:** owner records choice in D-013 (approve one path, defer MSRV, or reject both).
 
 ## O-003 — Authentication and sessions
+
+**Status:** PROPOSED design ready — see **`docs/AUTH_DESIGN_PROPOSAL.md`** (checklist **C1–C6**).
+
 Choose architecture and maintained crates for:
+
 - password hashing;
 - session store;
 - cookies;
@@ -29,7 +33,9 @@ Choose architecture and maintained crates for:
 - token authentication;
 - email verification and password reset.
 
-**Required:** threat model + options + owner approval before implementation.
+**Required:** owner approves proposal checklist → record **D-020**, then implement Phase A1→A6.
+
+**v1 scope (proposal):** database sessions, Argon2id, CSRF for web/Inertia, Sanctum-style API tokens; email reset/verify deferred to v1.1.
 
 ## O-004 — OpenAPI
 Select crate and generation strategy for API-only mode. Compare code-first and schema-first options. Ask owner before adding dependency.

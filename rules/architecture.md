@@ -8,7 +8,7 @@
 4. `omium-inertia`: Inertia protocol integration and frontend asset manifest integration.
 5. `omium-view`: Standard server-rendered view integration using Askama.
 6. `omium-cli`: project creation, commands, generators, migrations, dev server orchestration.
-7. `rustbridge-auth`: authentication/session/CSRF only after the security design is approved.
+7. `omium-auth`: authentication, session, CSRF, and API token helpers (only after O-003 / D-020 approval).
 8. `omium-testing`: test helpers and assertions.
 9. Application code lives in the generated app, not inside framework crates.
 

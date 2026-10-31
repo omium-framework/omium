@@ -157,9 +157,16 @@ Spike archive: `docs/INERTIA_SPIKE_REPORT.md`, `examples/inertia-spike/`.
 - Secrets are environment/secret-manager values, never committed config values.
 - Exact precedence rules are specified in `ARCHITECTURE.md`.
 
+### D-020 — Authentication and sessions (O-003)
+**Status: PROPOSED**
+
+Owner selected **Option A (auth)** for next work. Full threat model, crate choices, session/CSRF/token design, and phased implementation are in **`docs/AUTH_DESIGN_PROPOSAL.md`**.
+
+Pending owner approval of checklist items **C1–C6** before Phase **A1** code (new `omium-auth` crate).
+
 ## Deferred decisions
 
-- Authentication/session/CSRF crate and architecture: OPEN; approval required.
+- Authentication/session/CSRF: see **D-020** (PROPOSED) and `docs/AUTH_DESIGN_PROPOSAL.md`.
 - Queue backend and queue semantics: DEFERRED.
 - Cache backend: DEFERRED.
 - Scheduler implementation: DEFERRED.
