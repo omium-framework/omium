@@ -7,3 +7,13 @@ public/build/
 .env
 .env.*
 !.env.example
+
+# Local IDE / editor (never publish)
+.cursor/
+.idea/
+*.swp
+*.swo
+*~
+
+# Optional: uncomment to keep shared .vscode/*.json in git
+# .vscode/

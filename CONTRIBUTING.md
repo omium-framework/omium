@@ -32,6 +32,19 @@ cargo run -p omium-cli -- make:service Product --yes
 
 Generated `new` apps require a nearby `crates/` directory (monorepo layout). Overwriting existing generator output requires `--yes`.
 
+## What stays out of git
+
+The root `.gitignore` excludes machine-local and generated paths. Do **not** force-add these:
+
+| Path | Reason |
+|------|--------|
+| `.cursor/` | Cursor rules and local agent settings |
+| `.idea/` | JetBrains IDE metadata |
+| `target/`, `node_modules/`, `public/build/` | Build and install output |
+| `.env` (not `.env.example`) | Secrets and local config |
+
+Project conventions for humans and agents live in `rules/`, `AGENTS.md`, and this file — not in `.cursor/`.
+
 ## Pull requests
 
 - Keep changes small and reviewable.
