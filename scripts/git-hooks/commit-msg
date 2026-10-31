@@ -1,0 +1,4 @@
+#!/bin/sh
+# Strip Cursor co-author trailers (local IDE attribution).
+sed -i '' '/^Co-authored-by: Cursor <cursoragent@cursor.com>$/d' "$1"
+sed -i '' '/^Made-with: Cursor$/d' "$1"
