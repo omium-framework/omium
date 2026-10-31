@@ -1340,9 +1340,14 @@ name = "omium-auth"
 version = "0.1.4"
 dependencies = [
  "argon2",
+ "async-trait",
  "password-hash",
+ "sea-orm",
+ "serde",
+ "serde_json",
  "tempfile",
  "thiserror",
+ "tokio",
 ]
 
 [[package]]
@@ -1405,9 +1410,11 @@ version = "0.1.4"
 dependencies = [
  "axum",
  "http-body-util",
+ "omium-auth",
  "omium-core",
  "serde",
  "serde_json",
+ "tempfile",
  "thiserror",
  "tokio",
  "tower",

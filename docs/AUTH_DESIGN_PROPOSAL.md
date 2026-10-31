@@ -136,6 +136,21 @@ Config: `config/auth.toml` → `session.driver = "database" | "file"`.
 
 SeaORM entities live in **app** `src/models/`; `omium-auth` provides traits/helpers, not app-specific tables in the framework crate.
 
+**Database driver:** use `omium_auth::DatabaseSessionStore` with a `sessions` table matching `omium_auth::session::database::Model` (or run equivalent migration):
+
+```sql
+CREATE TABLE sessions (
+  id VARCHAR(255) PRIMARY KEY,
+  user_id BIGINT NULL,
+  ip_address VARCHAR(45) NULL,
+  user_agent TEXT NULL,
+  payload TEXT NOT NULL,
+  last_activity BIGINT NOT NULL
+);
+```
+
+**HTTP:** attach `omium_http::start_session` with `SessionMiddlewareState::new(store, SessionCookieConfig::default())`. Handlers use `axum::Extension<SessionHandle>`.
+
 ---
 
 ## 8. Configuration
@@ -187,7 +202,7 @@ Replace demo `web_group` logging middleware in examples/templates when implement
 | Phase | Deliverable | Exit |
 |-------|-------------|------|
 | **A1** | `omium-auth` crate: Argon2 hash/verify | unit tests ✅ |
-| **A2** | Session stores: **database + file**; cookie middleware in `omium-http` | integration tests |
+| **A2** | Session stores: **database + file**; cookie middleware in `omium-http` | integration tests ✅ (file + middleware) |
 | **A3** | CSRF + standard login/logout routes in template | Askama form test |
 | **A4** | Inertia shared `csrfToken` + login page | manual + inertia test |
 | **A5** | Personal access tokens (API template) | bearer auth test |

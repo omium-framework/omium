@@ -169,7 +169,7 @@ Owner approved **`docs/AUTH_DESIGN_PROPOSAL.md`** with:
 - **C5** Email verification + password reset; local dev via **Mailpit** (SMTP).
 - **C6** Sequential phases **A1–A7**.
 
-Phase **A1** (`hash_password` / `verify_password`) implemented in `crates/omium-auth`.
+Phase **A1–A2** implemented in `crates/omium-auth` and `omium-http::start_session`.
 
 ## Deferred decisions
 
