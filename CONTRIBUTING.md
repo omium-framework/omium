@@ -37,7 +37,10 @@ Generated `new` apps require a nearby `crates/` directory (monorepo layout). Ove
 - Keep changes small and reviewable.
 - Include tests when behavior changes.
 - Do not add core dependencies without updating `docs/DEPENDENCY_INVENTORY.md` and obtaining approval when required.
-- Commit messages for human contributors: Turkish, format `type:kısa açıklama` (see project git rules).
+- Commit messages: **English**, Conventional Commits style, optional leading emoji for clarity.
+  - Format: `type: emoji Short summary` (e.g. `feat: ✨ Add Vue template nav middleware`)
+  - Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci` — use `!` after type for breaking changes (`refactor!:`).
+  - Body optional; explain *why* when the subject alone is not enough.
 
 ## Security
 
