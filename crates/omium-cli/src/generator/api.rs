@@ -25,12 +25,8 @@ pub fn generate_api_app(dest: &Path, app_name: &str, force: bool) -> Result<()> 
     }
     assert_not_template_destination(dest, &template)?;
 
-    let package_name = dest
-        .file_name()
-        .and_then(|n| n.to_str())
-        .unwrap_or("omium-api-app")
-        .to_string();
-    let lib_name = package_name.replace('-', "_");
+    let package_name = super::naming::package_name_from_path(dest);
+    let lib_name = super::naming::lib_name_from_package_name(&package_name);
 
     copy_tree(&template, dest, force, COPY_SKIP_DIRS)?;
     super::template_manifest::activate_manifest_templates(dest)?;

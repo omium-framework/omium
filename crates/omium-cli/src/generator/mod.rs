@@ -4,6 +4,7 @@ mod api;
 mod crate_deps;
 pub(crate) mod framework_paths;
 mod make;
+mod naming;
 mod new;
 mod new_prompts;
 mod omnisan_script;

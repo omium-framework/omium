@@ -23,12 +23,8 @@ pub fn generate_vue_app(dest: &Path, app_name: &str, force: bool) -> Result<()> 
     }
     assert_not_vue_template_destination(dest)?;
 
-    let package_name = dest
-        .file_name()
-        .and_then(|n| n.to_str())
-        .unwrap_or("omium-vue-app")
-        .to_string();
-    let lib_name = package_name.replace('-', "_");
+    let package_name = super::naming::package_name_from_path(dest);
+    let lib_name = super::naming::lib_name_from_package_name(&package_name);
 
     copy_tree(&template, dest, force, COPY_SKIP_DIRS)?;
     super::template_manifest::activate_manifest_templates(dest)?;

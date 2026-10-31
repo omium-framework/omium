@@ -92,21 +92,13 @@ pub fn new_app(args: &NewArgs) -> Result<()> {
             print_standard_next_steps(&path);
         }
         FrontendMode::Vue => {
-            let package_name = path
-                .file_name()
-                .and_then(|n| n.to_str())
-                .unwrap_or("omium-vue-app")
-                .to_string();
             crate::generator::vue::generate_vue_app(&path, &app_name, args.yes)?;
+            let package_name = crate::generator::naming::package_name_from_path(&path);
             crate::generator::vue::print_vue_next_steps(&path, &package_name);
         }
         FrontendMode::React => {
-            let package_name = path
-                .file_name()
-                .and_then(|n| n.to_str())
-                .unwrap_or("omium-react-app")
-                .to_string();
             crate::generator::react::generate_react_app(&path, &app_name, args.yes)?;
+            let package_name = crate::generator::naming::package_name_from_path(&path);
             crate::generator::react::print_react_next_steps(&path, &package_name);
         }
     }
@@ -208,5 +200,26 @@ mod tests {
                 .join("demo-standard/src/models/mod.rs")
                 .is_file()
         );
+    }
+
+    #[test]
+    fn unicode_directory_name_produces_valid_cargo_toml() {
+        let temp = tempfile::tempdir().expect("tempdir");
+        std::fs::create_dir_all(temp.path().join("crates/omium-core")).expect("core");
+        let app_path = temp.path().join("adsız klasör");
+        new_app(&NewArgs {
+            path: app_path.clone(),
+            app_name: Some(String::from("Adsız Klasör")),
+            frontend: Some(FrontendMode::Standard),
+            yes: true,
+            no_interaction: true,
+        })
+        .expect("generate");
+        let cargo = std::fs::read_to_string(app_path.join("Cargo.toml")).expect("cargo");
+        assert!(
+            cargo.contains("adsiz_klasor_migration = { path = \"./migration\", package = \"adsiz-klasor-migration\" }"),
+            "unexpected Cargo.toml:\n{cargo}"
+        );
+        assert!(!cargo.contains("adsiz klas"));
     }
 }
