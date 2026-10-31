@@ -17,6 +17,7 @@ cargo fmt --all
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace
 cargo run -p omium-cli
+./scripts/smoke-new-apps.sh   # optional: generate + build all app templates
 ```
 
 CLI subcommands (run from an application root such as `examples/standard`):
