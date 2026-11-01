@@ -9,6 +9,8 @@ pub struct HtmlShell<'a> {
     pub title: &'a str,
     pub vite_tags: &'a str,
     pub body_class: Option<&'a str>,
+    /// Session CSRF token for `<meta name="csrf-token">` (Inertia / fetch clients).
+    pub csrf_token: Option<&'a str>,
 }
 
 /// Renders an Inertia page as HTML (first visit) or JSON (Inertia XHR).
@@ -25,6 +27,10 @@ pub fn render_page(
     let body_class = shell.body_class.unwrap_or("");
     let title = shell.title;
     let vite_tags = shell.vite_tags;
+    let csrf_meta = shell
+        .csrf_token
+        .map(|token| format!(r#"<meta name="csrf-token" content="{token}" />"#))
+        .unwrap_or_default();
     request.render(Inertia::response(component, props), |context| {
         Html(format!(
             r#"<!doctype html>
@@ -33,6 +39,7 @@ pub fn render_page(
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
+  {csrf_meta}
   {vite_tags}
 </head>
 <body class="{body_class}">

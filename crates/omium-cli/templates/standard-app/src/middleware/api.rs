@@ -2,6 +2,7 @@
 //!
 //! Laravel `Route::middleware('api')->prefix('api/v1')->group(...)` equivalent.
 //! CSRF, CORS, throttling, and auth are not implemented here yet (require approved design).
+//! Bearer token auth runs via `authenticate_api_token` in `routes/mod.rs` (see `config/auth.toml`).
 
 use axum::body::Body;
 use axum::http::Request;

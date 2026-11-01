@@ -1,40 +1,45 @@
 @import url("https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700");
+@import "tailwindcss";
 
-:root {
-  color-scheme: dark;
-  --bg-deep: #07070b;
-  --bg-mid: #0f1018;
-  --bg-elevated: #151622;
-  --border: rgb(255 255 255 / 0.08);
-  --border-strong: rgb(255 255 255 / 0.14);
-  --text: #f4f4f5;
-  --text-muted: #a1a1aa;
-  --accent: #ff5c47;
-  --accent-soft: rgb(255 92 71 / 0.14);
-  --accent-glow: rgb(255 92 71 / 0.35);
-  --violet: #8b5cf6;
-  --violet-soft: rgb(139 92 246 / 0.18);
-  --radius: 0.875rem;
-  --shadow: 0 24px 80px rgb(0 0 0 / 0.45);
+@theme {
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+@layer base {
+  :root {
+    color-scheme: dark;
+    --bg-deep: #07070b;
+    --bg-mid: #0f1018;
+    --bg-elevated: #151622;
+    --border: rgb(255 255 255 / 0.08);
+    --border-strong: rgb(255 255 255 / 0.14);
+    --text: #f4f4f5;
+    --text-muted: #a1a1aa;
+    --accent: #ff5c47;
+    --accent-soft: rgb(255 92 71 / 0.14);
+    --accent-glow: rgb(255 92 71 / 0.35);
+    --violet-soft: rgb(139 92 246 / 0.18);
+    --radius: 0.875rem;
+    --shadow: 0 24px 80px rgb(0 0 0 / 0.45);
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    @apply min-h-screen font-sans antialiased;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, var(--violet-soft), transparent 55%),
+      radial-gradient(900px 500px at 90% 0%, var(--accent-soft), transparent 50%),
+      linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 45%, var(--bg-deep) 100%);
+  }
 }
 
-body {
-  margin: 0;
-  font-family: "Instrument Sans", system-ui, sans-serif;
-  background: radial-gradient(1200px 600px at 10% -10%, var(--violet-soft), transparent 55%),
-    radial-gradient(900px 500px at 90% 0%, var(--accent-soft), transparent 50%),
-    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 45%, var(--bg-deep) 100%);
-  min-height: 100vh;
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-}
-
+@layer components {
 .app-shell {
   min-height: 100vh;
 }
@@ -86,11 +91,22 @@ body {
 .app-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-nav :is(a, button).nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  min-height: 2.25rem;
+  box-sizing: border-box;
+  line-height: 1.25;
 }
 
 .nav-link {
-  padding: 0.45rem 0.875rem;
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
@@ -285,17 +301,20 @@ body {
 }
 
 .btn,
-button[type="submit"] {
+button[type="submit"]:not(.nav-link) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.55rem 1.1rem;
+  margin: 0;
+  padding: 0.625rem 1.25rem;
+  min-height: 2.5rem;
   border-radius: 999px;
   font-size: 0.875rem;
   font-weight: 600;
   border: none;
   cursor: pointer;
   text-decoration: none;
+  box-sizing: border-box;
   background: linear-gradient(135deg, var(--accent), #ff8566);
   color: #0a0a0f;
   box-shadow: 0 10px 30px var(--accent-glow);
@@ -371,11 +390,22 @@ textarea:focus {
   max-width: 28rem;
 }
 
+.stack-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .stack-form .field span:first-child {
   display: block;
   font-weight: 600;
   font-size: 0.875rem;
   margin-bottom: 0.35rem;
+}
+
+.stack-form .btn,
+.stack-form button[type="submit"] {
+  margin-top: 0.25rem;
 }
 
 .form-actions {
@@ -437,4 +467,97 @@ a.btn-ghost {
 .table-actions {
   text-align: right;
   white-space: nowrap;
+}
+
+.auth-card {
+  background: linear-gradient(145deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.015));
+  backdrop-filter: blur(14px);
+  border-color: var(--border-strong);
+}
+
+.auth-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.auth-card-lead {
+  margin: 0.5rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.auth-footer-link {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.auth-footer-link:hover {
+  color: var(--text);
+}
+
+.auth-footer-link-accent {
+  color: #ffc9be;
+}
+
+.auth-footer-link-accent:hover {
+  color: #fff;
+}
+
+button.nav-link {
+  appearance: none;
+  cursor: pointer;
+  font: inherit;
+  background: transparent;
+  box-shadow: none;
+}
+
+button.nav-link:not(.nav-link-active):hover {
+  background: rgb(255 255 255 / 0.04);
+  border-color: var(--border);
+}
+
+.auth-footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.btn-primary-block {
+  width: 100%;
+  justify-content: center;
+}
+
+.card-narrow input[type="text"],
+.card-narrow input[type="email"],
+.card-narrow input[type="password"],
+.card-narrow textarea {
+  max-width: none;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  max-width: 28rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: rgb(0 0 0 / 0.25);
+  color: var(--text);
+  font: inherit;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: 2px solid rgb(255 92 71 / 0.45);
+  outline-offset: 1px;
+}
 }

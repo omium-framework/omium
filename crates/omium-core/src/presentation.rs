@@ -28,6 +28,8 @@ pub struct RequestPresentation {
     pub current_path: String,
     pub nav: Vec<NavLink>,
     pub flash: FlashMessages,
+    /// CSRF synchronizer token (web forms / `X-XSRF-TOKEN`).
+    pub csrf_token: Option<String>,
 }
 
 /// Marks whether a nav entry is active for `current_path`.
@@ -42,14 +44,29 @@ pub fn nav_link_active(current_path: &str, href: &str) -> bool {
 /// Builds navigation with `active` flags from the request path.
 #[must_use]
 pub fn build_nav(entries: &[(&str, &str)], current_path: &str) -> Vec<NavLink> {
+    build_nav_for_user(entries, current_path, false)
+}
+
+/// Like [`build_nav`], but omits guest-only entries (e.g. `/login`) when `authenticated`.
+#[must_use]
+pub fn build_nav_for_user(
+    entries: &[(&str, &str)],
+    current_path: &str,
+    authenticated: bool,
+) -> Vec<NavLink> {
     entries
         .iter()
+        .filter(|(href, _)| !(authenticated && is_guest_only_nav_href(href)))
         .map(|(href, label)| NavLink {
             href: (*href).to_string(),
             label: (*label).to_string(),
             active: nav_link_active(current_path, href),
         })
         .collect()
+}
+
+fn is_guest_only_nav_href(href: &str) -> bool {
+    matches!(href, "/login" | "/register")
 }
 
 /// Parses flash cookies from the raw `Cookie` header value.
@@ -117,5 +134,15 @@ mod tests {
         let flash = read_flash_from_cookie_header(Some(header));
         assert_eq!(flash.success.as_deref(), Some("Saved!"));
         assert_eq!(flash.error.as_deref(), Some("Bad"));
+    }
+
+    #[test]
+    fn authenticated_nav_hides_sign_in() {
+        let entries = [("/", "Home"), ("/login", "Sign in")];
+        let nav = build_nav_for_user(&entries, "/", true);
+        assert_eq!(nav.len(), 1);
+        assert_eq!(nav[0].href, "/");
+        let guest = build_nav_for_user(&entries, "/", false);
+        assert_eq!(guest.len(), 2);
     }
 }

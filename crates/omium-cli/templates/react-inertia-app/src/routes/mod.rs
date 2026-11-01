@@ -7,14 +7,18 @@ use std::path::PathBuf;
 
 use axum::Router;
 use axum::middleware::{from_fn, from_fn_with_state};
-use axum::routing::{delete, get};
-use omium_http::{PresentationNav, inject_request_presentation};
+use axum::routing::{delete, get, post};
+use omium_http::{
+    PresentationNav, authenticate_api_token, inject_request_presentation, share_csrf_token,
+    start_session, verify_csrf_header, ApiTokenMiddlewareState, SessionMiddlewareState,
+};
 use omium_inertia::inertia_rs::{SharedProps, VersionLayer};
 use tower_http::services::ServeDir;
 
 use crate::app::{ASSET_VERSION, MAIN_NAV, RuntimeState};
-use crate::controllers::{about, dashboard, examples};
+use crate::controllers::{about, auth, dashboard, examples};
 use crate::middleware;
+use crate::middleware::inject_authenticated;
 
 pub use manifest::print_route_table;
 
@@ -24,29 +28,39 @@ fn presentation_nav() -> PresentationNav {
     }
 }
 
-fn web_group<S>(routes: Router<S>) -> Router<S>
-where
-    S: Clone + Send + Sync + 'static,
-{
+fn web_group(
+    routes: Router<RuntimeState>,
+    session: SessionMiddlewareState,
+) -> Router<RuntimeState> {
     routes
+        .route_layer(from_fn(middleware::web_group))
+        .route_layer(from_fn(inject_authenticated))
+        .route_layer(from_fn(verify_csrf_header))
+        .route_layer(from_fn(share_csrf_token))
         .route_layer(from_fn_with_state(
             presentation_nav(),
             inject_request_presentation,
         ))
-        .route_layer(from_fn(middleware::web_group))
+        .route_layer(from_fn_with_state(session, start_session))
 }
 
-/// Laravel `Route::prefix('api/v1')->middleware('api')->group(...)` equivalent.
-fn api_group<S>(routes: Router<S>) -> Router<S>
-where
-    S: Clone + Send + Sync + 'static,
-{
-    routes.route_layer(from_fn(middleware::api_group))
+fn api_group(
+    routes: Router<RuntimeState>,
+    api_tokens: ApiTokenMiddlewareState,
+) -> Router<RuntimeState> {
+    routes
+        .route_layer(from_fn(middleware::api_group))
+        .route_layer(from_fn_with_state(
+            api_tokens,
+            authenticate_api_token,
+        ))
 }
 
 fn web_routes() -> Router<RuntimeState> {
     Router::new()
         .route("/", get(dashboard::show))
+        .route("/login", get(auth::show_login).post(auth::login))
+        .route("/logout", post(auth::logout))
         .route("/examples", get(examples::index))
         .route(
             "/examples/new",
@@ -62,12 +76,14 @@ fn web_routes() -> Router<RuntimeState> {
 
 /// Registers all HTTP routes for the application.
 pub fn register(state: RuntimeState) -> Router {
+    let session = state.session.clone();
+    let api_tokens = state.api_tokens.clone();
     let public_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("public");
     let app_name = state.app.config().app.name.clone();
 
     Router::new()
-        .merge(web_group(web_routes()))
-        .nest("/api/v1", api_group(api::routes()))
+        .merge(web_group(web_routes(), session))
+        .nest("/api/v1", api_group(api::routes(), api_tokens))
         .nest_service("/build", ServeDir::new(public_dir.join("build")))
         .with_state(state)
         .layer(axum::Extension(

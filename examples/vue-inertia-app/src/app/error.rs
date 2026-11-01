@@ -26,6 +26,18 @@ pub enum RuntimeError {
 
     #[error(transparent)]
     Vite(#[from] omium_inertia::inertia_rs::ViteAssetError),
+
+    #[error(transparent)]
+    Mail(#[from] omium_mail::MailError),
+
+    #[error(transparent)]
+    DemoUser(#[from] crate::app::DemoUserError),
+
+    #[error(transparent)]
+    Session(#[from] omium_auth::SessionError),
+
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
 }
 
 impl IntoResponse for RuntimeError {

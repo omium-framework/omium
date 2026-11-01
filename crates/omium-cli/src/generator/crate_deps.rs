@@ -8,7 +8,7 @@ use anyhow::{Context, Result};
 use super::framework_paths;
 
 /// Published Omium crate version (keep in sync with `[workspace.package].version`).
-pub const OMIUM_REGISTRY_VERSION: &str = "0.1.4";
+pub const OMIUM_REGISTRY_VERSION: &str = "0.1.5";
 
 /// How generated app `Cargo.toml` files resolve framework crates.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -232,7 +232,7 @@ mod tests {
     #[test]
     fn registry_api_deps_contain_omium_packages() {
         let block = api_framework_dependencies(&DependencyMode::Registry);
-        assert!(block.contains("version = \"0.1.4\""));
+        assert!(block.contains("version = \"0.1.5\""));
     }
 
     #[test]
@@ -249,6 +249,6 @@ omium-view = { path = "../../crates/omium-view" }
         let block = inertia_app_framework_dependencies(&DependencyMode::Registry);
         let out = replace_framework_dependency_block(sample, &block);
         assert_eq!(out.matches("omium-view").count(), 1);
-        assert!(out.contains("omium-core = { version = \"0.1.4\" }"));
+        assert!(out.contains("omium-core = { version = \"0.1.5\" }"));
     }
 }

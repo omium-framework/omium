@@ -1,5 +1,5 @@
-import { Link, usePage } from "@inertiajs/react";
-import type { ReactNode } from "react";
+import { Link, router, usePage } from "@inertiajs/react";
+import { useEffect, type ReactNode } from "react";
 
 type NavItem = { href: string; label: string; active: boolean };
 type FlashProps = { success?: string; error?: string };
@@ -13,8 +13,26 @@ type AppLayoutProps = {
 
 export default function AppLayout({ appName, title, subtitle, children }: AppLayoutProps) {
   const page = usePage();
-  const nav = (page.props.nav as NavItem[] | undefined) ?? [];
+  const authenticated = Boolean(page.props.authenticated);
+  const navItems = (page.props.nav as NavItem[] | undefined) ?? [];
+  const nav = authenticated
+    ? navItems.filter((item) => item.href !== "/login")
+    : navItems;
   const flash = (page.props.flash as FlashProps | undefined) ?? {};
+  const csrfToken = page.props.csrfToken as string | null;
+
+  useEffect(() => {
+    if (typeof csrfToken !== "string" || csrfToken.length === 0) {
+      return;
+    }
+    let meta = document.querySelector('meta[name="csrf-token"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "csrf-token");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", csrfToken);
+  }, [csrfToken]);
 
   return (
     <div className="app-shell">
@@ -35,6 +53,15 @@ export default function AppLayout({ appName, title, subtitle, children }: AppLay
                 {item.label}
               </Link>
             ))}
+            {authenticated ? (
+              <button
+                type="button"
+                className="nav-link nav-link-button"
+                onClick={() => router.post("/logout")}
+              >
+                Sign out
+              </button>
+            ) : null}
           </nav>
         </div>
       </header>

@@ -203,10 +203,10 @@ Replace demo `web_group` logging middleware in examples/templates when implement
 |-------|-------------|------|
 | **A1** | `omium-auth` crate: Argon2 hash/verify | unit tests ✅ |
 | **A2** | Session stores: **database + file**; cookie middleware in `omium-http` | integration tests ✅ (file + middleware) |
-| **A3** | CSRF + standard login/logout routes in template | Askama form test |
-| **A4** | Inertia shared `csrfToken` + login page | manual + inertia test |
-| **A5** | Personal access tokens (API template) | bearer auth test |
-| **A6** | Email verify + password reset + Mailpit in Compose | SMTP integration test |
+| **A3** | CSRF + standard login/logout routes in template | Askama form test ✅ |
+| **A4** | Inertia shared `csrfToken` + login page | manual + inertia test ✅ |
+| **A5** | Personal access tokens (API template) | bearer auth test ✅ |
+| **A6** | Email verify + password reset + Mailpit in Compose | SMTP integration test ✅ |
 | **A7** | `omnisan make:user` / auth migrations in generator | docs |
 
 Publish: bump `omium-*` patch versions together; update `OMIUM_REGISTRY_VERSION`.

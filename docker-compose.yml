@@ -29,3 +29,11 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: omium-mailpit-dev
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"

@@ -8,6 +8,12 @@ public/build/
 .env.*
 !.env.example
 
+# Runtime storage (sessions, password reset tokens, local demo data)
+**/storage/framework/sessions/
+**/storage/framework/password_reset/
+**/storage/framework/email_verification/
+**/storage/framework/demo_users.toml
+
 # Local IDE / editor (never publish)
 .cursor/
 .idea/

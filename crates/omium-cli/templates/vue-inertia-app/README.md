@@ -7,6 +7,10 @@ Reference app for Omium Vue mode. Use **`./omnisan`** for all tasks (like `php a
 | Rust (via `./omnisan dev`) | **3002** |
 | Vite dev (started by omnisan) | **5173** |
 
+## CSRF (Inertia visits)
+
+Each page includes a shared `csrfToken` prop (from the session). The root layout keeps `<meta name="csrf-token">` in sync, and `resources/js/app.ts` sends `X-XSRF-TOKEN` on every Inertia visit (POST/PUT/PATCH/DELETE). Form posts also send `_token` in the body where required.
+
 ## Development (hot reload)
 
 ```bash

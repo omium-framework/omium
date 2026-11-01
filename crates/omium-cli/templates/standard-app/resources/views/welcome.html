@@ -30,5 +30,15 @@
       <span>Swap to Vue or React later without redesigning the shell.</span>
     </div>
   </div>
+  {% if authenticated %}
+  <form method="post" action="/logout" class="logout-form">
+    {% if let Some(token) = csrf_token %}
+    <input type="hidden" name="_token" value="{{ token }}">
+    {% endif %}
+    <button type="submit" class="btn-link-danger">Log out</button>
+  </form>
+  {% else %}
+  <p class="hint"><a class="nav-link-inline" href="/login">Sign in</a> to try demo authentication.</p>
+  {% endif %}
 </section>
 {% endblock %}

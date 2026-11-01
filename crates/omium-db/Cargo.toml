@@ -15,7 +15,7 @@ workspace = true
 name = "omium_db"
 
 [dependencies]
-omium-core = { path = "../omium-core", version = "0.1.4" }
+omium-core = { path = "../omium-core", version = "0.1.5" }
 sea-orm = { workspace = true }
 sea-orm-migration = { workspace = true }
 thiserror = { workspace = true }

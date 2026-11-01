@@ -29,19 +29,23 @@ doc = false
 [dependencies]
 askama = "0.14"
 axum = { workspace = true }
+omium-auth = { path = "../../crates/omium-auth" }
 omium-core = { path = "../../crates/omium-core" }
 omium-db = { path = "../../crates/omium-db" }
 omium-http = { path = "../../crates/omium-http" }
+omium-mail = { path = "../../crates/omium-mail" }
 omium-view = { path = "../../crates/omium-view" }
 sea-orm = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
+toml = { workspace = true }
 tower-http = { workspace = true, features = ["fs"] }
 tracing = { workspace = true }
 
 [dev-dependencies]
 http-body-util = "0.1"
 omium_standard_app_migration = { path = "./migration", package = "omium-standard-app-migration" }
+omium-mail = { path = "../../crates/omium-mail" }
 tower = { workspace = true }

@@ -1,7 +1,7 @@
 [package]
 name = "omium-cli"
 description = "CLI library, project generator, and development commands (omnisan binary)"
-version = "0.1.10"
+version = "0.1.11"
 edition.workspace = true
 publish = true
 license.workspace = true
@@ -21,9 +21,9 @@ path = "src/bin/omnisan.rs"
 [dependencies]
 anyhow = { workspace = true }
 clap = { workspace = true }
-omium-core = { path = "../omium-core", version = "0.1.4" }
-omium-db = { path = "../omium-db", version = "0.1.4" }
-omium-http = { path = "../omium-http", version = "0.1.4" }
+omium-core = { path = "../omium-core", version = "0.1.5" }
+omium-db = { path = "../omium-db", version = "0.1.5" }
+omium-http = { path = "../omium-http", version = "0.1.5" }
 tokio = { workspace = true, features = ["macros", "rt-multi-thread", "process", "net", "time"] }
 tracing = { workspace = true }
 

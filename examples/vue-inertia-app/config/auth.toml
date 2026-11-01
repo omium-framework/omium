@@ -1,0 +1,21 @@
+[session]
+driver = "file"
+cookie = "omium_session"
+lifetime_minutes = 120
+file_path = "storage/framework/sessions"
+
+[csrf]
+enabled = true
+
+[demo]
+enabled = true
+email = "admin@omium.local"
+# Local development only — override with APP_AUTH__DEMO_PASSWORD in .env
+password = "omium-dev"
+
+[mail]
+driver = "smtp"
+host = "127.0.0.1"
+port = 1025
+from_address = "noreply@omium.local"
+from_name = "Omium"

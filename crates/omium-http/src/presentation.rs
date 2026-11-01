@@ -5,9 +5,10 @@ use axum::extract::State;
 use axum::http::header::{COOKIE, SET_COOKIE};
 use axum::http::{HeaderValue, Request, Response};
 use axum::middleware::Next;
+use omium_auth::SessionHandle;
 use omium_core::presentation::{
-    FLASH_ERROR_COOKIE, FLASH_SUCCESS_COOKIE, FlashMessages, RequestPresentation, build_nav,
-    read_flash_from_cookie_header,
+    FLASH_ERROR_COOKIE, FLASH_SUCCESS_COOKIE, FlashMessages, RequestPresentation,
+    build_nav_for_user, read_flash_from_cookie_header,
 };
 
 /// Application navigation entries (`href`, `label`), shared by middleware.
@@ -29,11 +30,16 @@ pub async fn inject_request_presentation(
         .and_then(|value| value.to_str().ok());
     let flash = read_flash_from_cookie_header(cookie_header);
     let had_flash = flash.success.is_some() || flash.error.is_some();
+    let authenticated = match request.extensions().get::<SessionHandle>() {
+        Some(handle) => handle.read().await.user_id().is_some(),
+        None => false,
+    };
 
     let presentation = RequestPresentation {
         current_path,
-        nav: build_nav(nav.entries, request.uri().path()),
+        nav: build_nav_for_user(nav.entries, request.uri().path(), authenticated),
         flash,
+        csrf_token: None,
     };
     request.extensions_mut().insert(presentation);
 

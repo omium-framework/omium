@@ -7,12 +7,13 @@ members = [
     "crates/omium-db",
     "crates/omium-http",
     "crates/omium-inertia",
+    "crates/omium-mail",
     "crates/omium-testing",
     "crates/omium-view",
 ]
 
 [workspace.package]
-version = "0.1.4"
+version = "0.1.5"
 edition = "2024"
 publish = false
 authors = ["Orhan MUSELLİM <info@orhanmusellim.com>"]
@@ -46,12 +47,20 @@ sea-orm-migration = { version = "1.1.19", default-features = false, features = [
 ] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
+sha2 = "0.10.9"
 sqlx = { version = "0.8.6", default-features = false, features = [
     "runtime-tokio-rustls",
     "mysql",
 ] }
 thiserror = "2.0.17"
 dotenvy = "0.15.7"
+lettre = { version = "0.11.19", default-features = false, features = [
+    "builder",
+    "smtp-transport",
+    "pool",
+    "hostname",
+    "tokio1",
+] }
 tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread", "signal"] }
 toml = "0.8.23"
 tower = "0.5.2"

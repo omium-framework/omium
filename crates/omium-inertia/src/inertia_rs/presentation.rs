@@ -16,4 +16,12 @@ pub fn inertia_presentation_props(presentation: &RequestPresentation) -> Inertia
             "flash",
             serde_json::to_value(&presentation.flash).unwrap_or(serde_json::Value::Null),
         )
+        .value(
+            "csrfToken",
+            presentation
+                .csrf_token
+                .clone()
+                .map(serde_json::Value::String)
+                .unwrap_or(serde_json::Value::Null),
+        )
 }

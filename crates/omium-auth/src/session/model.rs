@@ -124,7 +124,8 @@ impl Session {
         &self.data
     }
 
-    pub(crate) fn clear_dirty(&mut self) {
+    /// Resets the dirty flag after a successful write to the session store.
+    pub fn mark_persisted(&mut self) {
         self.dirty = false;
     }
 

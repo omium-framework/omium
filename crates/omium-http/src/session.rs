@@ -69,18 +69,39 @@ pub async fn start_session(
 
     let mut response = next.run(request).await;
 
-    let session = handle.read().await;
-    if session.is_dirty() {
-        if let Err(err) = state.store.save(&session).await {
-            tracing::error!(error = %err, "failed to persist session");
-        } else if session.is_destroyed() {
-            if let Ok(value) = HeaderValue::from_str(&state.cookie.clear_cookie_value()) {
-                response.headers_mut().append(SET_COOKIE, value);
+    let persist = {
+        let session = handle.read().await;
+        if !session.is_dirty() {
+            None
+        } else {
+            Some((
+                session.is_destroyed(),
+                session.id().as_str().to_string(),
+            ))
+        }
+    };
+
+    if let Some((destroyed, session_id)) = persist {
+        let save_result = {
+            let session = handle.read().await;
+            state.store.save(&session).await
+        };
+
+        match save_result {
+            Err(err) => tracing::error!(error = %err, "failed to persist session"),
+            Ok(()) => {
+                handle.write().await.mark_persisted();
+                if destroyed {
+                    if let Ok(value) = HeaderValue::from_str(&state.cookie.clear_cookie_value())
+                    {
+                        response.headers_mut().append(SET_COOKIE, value);
+                    }
+                } else if let Ok(value) =
+                    HeaderValue::from_str(&state.cookie.set_cookie_value(&session_id))
+                {
+                    response.headers_mut().append(SET_COOKIE, value);
+                }
             }
-        } else if let Ok(value) =
-            HeaderValue::from_str(&state.cookie.set_cookie_value(session.id().as_str()))
-        {
-            response.headers_mut().append(SET_COOKIE, value);
         }
     }
 

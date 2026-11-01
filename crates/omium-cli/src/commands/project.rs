@@ -256,7 +256,29 @@ pub async fn cargo_watch_run_in_with_env(
 
     let mut command = Command::new("cargo");
     command
-        .args(["watch", "-c", "-x", &run_spec])
+        .args([
+            "watch",
+            "-c",
+            "--skip-local-deps",
+            "-w",
+            "src",
+            "-w",
+            "config",
+            "-i",
+            "storage",
+            "-i",
+            "public",
+            "-i",
+            "resources",
+            "-i",
+            "node_modules",
+            "-i",
+            "target",
+            "-d",
+            "2.0",
+            "-x",
+            &run_spec,
+        ])
         .current_dir(root)
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
@@ -265,7 +287,9 @@ pub async fn cargo_watch_run_in_with_env(
         command.env(key, value);
     }
 
-    tracing::info!("Rust: cargo watch (restarts server when src/ changes)");
+    tracing::info!(
+        "Rust: cargo watch (restarts on src/ + config/ changes only; use --no-rust-watch for a stable server)"
+    );
 
     let status = command
         .status()

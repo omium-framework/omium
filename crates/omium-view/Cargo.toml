@@ -20,7 +20,7 @@ dirs = ["templates"]
 [dependencies]
 askama = { workspace = true }
 axum = { workspace = true }
-omium-core = { path = "../omium-core", version = "0.1.4" }
+omium-core = { path = "../omium-core", version = "0.1.5" }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
 

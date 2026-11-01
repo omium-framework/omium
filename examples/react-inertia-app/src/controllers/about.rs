@@ -8,12 +8,14 @@ use omium_inertia::inertia_rs::InertiaRequest;
 
 use crate::app::{RuntimeError, RuntimeState};
 use crate::http::render_inertia;
+use crate::middleware::Authenticated;
 
 /// `GET /about`
 pub async fn show(
     State(state): State<RuntimeState>,
     request: InertiaRequest,
     Extension(presentation): Extension<RequestPresentation>,
+    Extension(Authenticated(authenticated)): Extension<Authenticated>,
 ) -> Result<Response, RuntimeError> {
     let stack = serde_json::json!([
         "omium-core — config & bootstrap",
@@ -25,6 +27,7 @@ pub async fn show(
         &state,
         &request,
         &presentation,
+        authenticated,
         "About",
         "About",
         |props| props.value("stack", stack),

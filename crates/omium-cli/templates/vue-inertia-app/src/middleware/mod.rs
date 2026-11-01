@@ -1,5 +1,6 @@
 //! Application middleware (Laravel `app/Http/Middleware` + `Kernel` equivalent).
 
+pub mod auth;
 mod api;
 mod web;
 
@@ -8,6 +9,7 @@ use omium_core::config::ServerSettings;
 use omium_http::apply_default_middleware;
 
 pub use api::api_group;
+pub use auth::{Authenticated, inject_authenticated};
 pub use web::web_group;
 
 /// Applies app middleware, then the framework default stack (request id, trace, timeout, body limit).

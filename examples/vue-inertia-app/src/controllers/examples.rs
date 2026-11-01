@@ -10,6 +10,7 @@ use omium_view::ValidationErrors;
 use crate::app::{RuntimeError, RuntimeState};
 use crate::forms::{ExampleFormInput, normalized_description, validate_example_form};
 use crate::http::{example_form_props, render_inertia};
+use crate::middleware::Authenticated;
 use crate::services::ExampleService;
 
 /// `GET /examples`
@@ -17,6 +18,7 @@ pub async fn index(
     State(state): State<RuntimeState>,
     request: InertiaRequest,
     Extension(presentation): Extension<RequestPresentation>,
+    Extension(Authenticated(authenticated)): Extension<Authenticated>,
 ) -> Result<Response, RuntimeError> {
     let (rows, db_enabled, hint) = match &state.db {
         Some(connection) => match ExampleService::list(connection).await {
@@ -63,6 +65,7 @@ pub async fn index(
         &state,
         &request,
         &presentation,
+        authenticated,
         "Examples",
         "Examples",
         move |base| {
@@ -80,11 +83,13 @@ pub async fn create_form(
     State(state): State<RuntimeState>,
     request: InertiaRequest,
     Extension(presentation): Extension<RequestPresentation>,
+    Extension(Authenticated(authenticated)): Extension<Authenticated>,
 ) -> Result<Response, RuntimeError> {
     render_inertia(
         &state,
         &request,
         &presentation,
+        authenticated,
         "ExampleForm",
         "New example",
         |base| {
@@ -106,6 +111,7 @@ pub async fn create(
     State(state): State<RuntimeState>,
     request: InertiaRequest,
     Extension(presentation): Extension<RequestPresentation>,
+    Extension(Authenticated(authenticated)): Extension<Authenticated>,
     InertiaForm(input): InertiaForm<ExampleFormInput>,
 ) -> Result<Response, RuntimeError> {
     let errors = validate_example_form(&input);
@@ -114,6 +120,7 @@ pub async fn create(
             &state,
             &request,
             &presentation,
+        authenticated,
             "ExampleForm",
             "New example",
             |base| {
@@ -135,6 +142,7 @@ pub async fn create(
             &state,
             &request,
             &presentation,
+        authenticated,
             "ExampleForm",
             "New example",
             |base| {
@@ -173,12 +181,14 @@ pub async fn edit_form(
     Path(id): Path<u32>,
     request: InertiaRequest,
     Extension(presentation): Extension<RequestPresentation>,
+    Extension(Authenticated(authenticated)): Extension<Authenticated>,
 ) -> Result<Response, RuntimeError> {
     let Some(connection) = state.db.as_ref() else {
         return render_inertia(
             &state,
             &request,
             &presentation,
+        authenticated,
             "ExampleForm",
             "Edit example",
             |base| {
@@ -195,6 +205,7 @@ pub async fn edit_form(
             &state,
             &request,
             &presentation,
+        authenticated,
             "Examples",
             "Examples",
             |base| base.value("statusMessage", format!("Example #{id} was not found.")),
@@ -206,6 +217,7 @@ pub async fn edit_form(
         &state,
         &request,
         &presentation,
+        authenticated,
         "ExampleForm",
         "Edit example",
         |base| {
@@ -228,6 +240,7 @@ pub async fn update(
     Path(id): Path<u32>,
     request: InertiaRequest,
     Extension(presentation): Extension<RequestPresentation>,
+    Extension(Authenticated(authenticated)): Extension<Authenticated>,
     InertiaForm(input): InertiaForm<ExampleFormInput>,
 ) -> Result<Response, RuntimeError> {
     let form_action = format!("/examples/{id}/edit");
@@ -237,6 +250,7 @@ pub async fn update(
             &state,
             &request,
             &presentation,
+        authenticated,
             "ExampleForm",
             "Edit example",
             |base| {
@@ -258,6 +272,7 @@ pub async fn update(
             &state,
             &request,
             &presentation,
+        authenticated,
             "ExampleForm",
             "Edit example",
             |base| {
@@ -295,6 +310,7 @@ pub async fn update(
             &state,
             &request,
             &presentation,
+        authenticated,
             "Examples",
             "Examples",
             |base| base.value("statusMessage", format!("Example #{id} was not found.")),
@@ -309,12 +325,14 @@ pub async fn destroy(
     Path(id): Path<u32>,
     request: InertiaRequest,
     Extension(presentation): Extension<RequestPresentation>,
+    Extension(Authenticated(authenticated)): Extension<Authenticated>,
 ) -> Result<Response, RuntimeError> {
     let Some(connection) = state.db.as_ref() else {
         return render_inertia(
             &state,
             &request,
             &presentation,
+        authenticated,
             "Examples",
             "Examples",
             |base| {
@@ -336,6 +354,7 @@ pub async fn destroy(
             &state,
             &request,
             &presentation,
+        authenticated,
             "Examples",
             "Examples",
             |base| base.value("statusMessage", format!("Example #{id} was not found.")),

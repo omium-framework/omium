@@ -23,6 +23,15 @@ pub enum RuntimeError {
 
     #[error(transparent)]
     ExampleService(#[from] crate::services::ExampleServiceError),
+
+    #[error(transparent)]
+    Mail(#[from] omium_mail::MailError),
+
+    #[error(transparent)]
+    AuthStore(#[from] omium_auth::SessionError),
+
+    #[error(transparent)]
+    DemoUser(#[from] crate::app::DemoUserError),
 }
 
 impl IntoResponse for RuntimeError {

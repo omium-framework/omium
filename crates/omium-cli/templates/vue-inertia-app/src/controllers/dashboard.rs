@@ -8,18 +8,21 @@ use omium_inertia::inertia_rs::InertiaRequest;
 
 use crate::app::{RuntimeError, RuntimeState};
 use crate::http::render_inertia;
+use crate::middleware::Authenticated;
 
 /// `GET /`
 pub async fn show(
     State(state): State<RuntimeState>,
     request: InertiaRequest,
     Extension(presentation): Extension<RequestPresentation>,
+    Extension(Authenticated(authenticated)): Extension<Authenticated>,
 ) -> Result<Response, RuntimeError> {
     let app_name = state.app.config().app.name.clone();
     render_inertia(
         &state,
         &request,
         &presentation,
+        authenticated,
         "Dashboard",
         "Welcome",
         |props| {

@@ -3,5 +3,6 @@
 /// `href`, then label — active state is computed per request in middleware.
 pub const MAIN_NAV: &[(&str, &str)] = &[
     ("/", "Home"),
+    ("/login", "Sign in"),
     ("/health", "Health"),
 ];

@@ -2,9 +2,9 @@
 
 use std::path::PathBuf;
 
-use vue_inertia_app_migration::Migrator;
 use omium_core::config::load_config;
 use omium_db::{DatabaseError, apply_migrations, connect};
+use vue_inertia_app_migration::Migrator;
 
 #[tokio::main]
 async fn main() -> Result<(), MigrateError> {

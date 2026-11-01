@@ -23,11 +23,12 @@ axum = { workspace = true }
 inertia_rs = { version = "0.4.0", optional = true, default-features = false, features = [
     "axum",
 ] }
-omium-core = { path = "../omium-core", version = "0.1.4" }
-omium-view = { package = "omium-view", path = "../omium-view", version = "0.1.4" }
+omium-core = { path = "../omium-core", version = "0.1.5" }
+omium-view = { package = "omium-view", path = "../omium-view", version = "0.1.5" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
+tower = { workspace = true }
 
 [dev-dependencies]
 tempfile = { workspace = true }

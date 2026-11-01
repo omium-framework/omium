@@ -4,7 +4,7 @@ use std::path::PathBuf;
 
 use omium_core::config::AppConfig;
 use omium_db::{connect, ping};
-use omium_inertia::inertia_rs::{vite_production_tags, vite_react_dev_tags};
+use omium_inertia::inertia_rs::{vite_dev_tags, vite_production_tags};
 use sea_orm::DatabaseConnection;
 
 use super::RuntimeError;
@@ -62,7 +62,7 @@ pub fn resolve_vite_tags(_config: &AppConfig) -> Result<String, RuntimeError> {
         && !origin.trim().is_empty()
     {
         tracing::info!(%origin, "using Vite dev server tags");
-        return Ok(vite_react_dev_tags(origin.trim(), VITE_ENTRY));
+        return Ok(vite_dev_tags(origin.trim(), VITE_ENTRY));
     }
 
     let manifest =
